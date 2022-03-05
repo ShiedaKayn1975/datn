@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-## Features
+## BA
 
 - Cho phép người dùng có thể đấu giá hoặc đưa sản phẩm lên sàn để đấu giá.
 - Người dùng có thể xem các phiên đấu giá đang diễn ra một cách trực tiếp .
