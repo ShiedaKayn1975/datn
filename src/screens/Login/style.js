@@ -89,7 +89,7 @@ export const useStyles = makeStyles({
   wave1: {
     animation: '$animate1 30s linear infinite',
     zIndex: 1000,
-    opacity: 0.4,
+    opacity: 0.1,
     animationDelay: '0s',
     bottom: 0
   },
@@ -104,7 +104,7 @@ export const useStyles = makeStyles({
   wave2: {
     animation: '$animate2 15s linear infinite',
     zIndex: 999,
-    opacity: 0.3,
+    opacity: 0.15,
     animationDelay: '-5s',
     bottom: 0
   },
