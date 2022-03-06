@@ -20,3 +20,10 @@ Build theo mô hình microservice.
 
 - [ReactJS] - Frontend
 - [Ruby On Rails] - Backend
+
+## Run
+
+Pull nhánh dev về
+
+- npm install
+- npm start
