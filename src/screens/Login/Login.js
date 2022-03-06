@@ -5,6 +5,7 @@ import GreyInput from '../../components/Input/GreyInput'
 import GreyCheckbox from '../../components/Checkbox/GreyCheckbox'
 import CustomDefaultButton from '../../components/Button/CustomDefaultButton'
 import clsx from 'clsx'
+import WaveFooter from '../../components/Footer/WaveFooter'
 
 export const LoginScreen = (props) => {
   const classes = useStyles()
@@ -30,7 +31,7 @@ export const LoginScreen = (props) => {
               placeholder="Password"
               type="password"
               className={classes.input}
-              fullwidth="true"
+              fullwidth={true}
             />
           </div>
           <div className={classes.extraWrapper}>
@@ -53,19 +54,9 @@ export const LoginScreen = (props) => {
           </div>
         </div>
       </div>
-      <footer className={classes.waveFooter}>
-        <section>
-          <div className={clsx(classes.wave, classes.wave1)}>
-
-          </div>
-          <div className={clsx(classes.wave, classes.wave2)}>
-
-          </div>
-          <div className={clsx(classes.wave, classes.wave3)}>
-
-          </div>
-        </section>
-      </footer>
+      <div className={classes.waveFooter}>
+        <WaveFooter/>
+      </div>
     </div>
   )
 }
