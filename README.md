@@ -13,7 +13,6 @@
 - Sau khi phiên đấu giá thành công, người bán sẽ được nhận tiền.
 - Sau mỗi phiên đấu giá thành công, người bán sẽ được tăng mức độ uy tín.
 - Phí mỗi phiên đấu giá là 5% giá trị của sản phẩm
-- C
 
 ## Tech
 
