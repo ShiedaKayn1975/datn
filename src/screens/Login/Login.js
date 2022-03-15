@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useStyles } from './style'
 import { TextField, Checkbox } from '@mui/material'
 import GreyInput from '../../components/Input/GreyInput'
@@ -6,13 +6,27 @@ import GreyCheckbox from '../../components/Checkbox/GreyCheckbox'
 import CustomDefaultButton from '../../components/Button/CustomDefaultButton'
 import clsx from 'clsx'
 import WaveFooter from '../../components/Footer/WaveFooter'
+import { peckPortalClient } from '../../Api'
 
 export const LoginScreen = (props) => {
   const classes = useStyles()
+  const [form, setForm] = useState(null)
+
+  const handleChange = (event) => {
+    let formData = form || {}
+    formData[event.target.name] = event.target.value
+    setForm(formData)
+  }
+
+  const signIn = () => {
+    if(formData){
+      /// validate form
+      peckPortalClient.login(formData.username, formData.password)
+    }
+  }
 
   return (
     <div className={classes.root}>
-      {/* form wrapper */}
       <div className={classes.formWrapper}>
         <div className={classes.formWrapperContent}>
           <div className={classes.titleWrapper}>
@@ -25,13 +39,17 @@ export const LoginScreen = (props) => {
               placeholder="Username or Email"
               className={classes.input}
               // fullwidth={true}
+              name={'username'}
+              onChange={handleChange}
             />
             <GreyInput
               aria-label="Password"
               placeholder="Password"
               type="password"
+              name="password"
               className={classes.input}
-              // fullwidth={true}
+              onChange={handleChange}
+            // fullwidth={true}
             />
           </div>
           <div className={classes.extraWrapper}>
@@ -47,7 +65,8 @@ export const LoginScreen = (props) => {
           </div>
           <div className={classes.submitButton}>
             <CustomDefaultButton
-              style={{width: '100%'}}
+              style={{ width: '100%' }}
+              onClick={signIn}
             >
               Sign In
             </CustomDefaultButton>
@@ -59,10 +78,10 @@ export const LoginScreen = (props) => {
           window.location.href = '/register'
         }}
       >
-          <p className={classes.registerContent}>Don't have an account yet? Sign Up</p>
+        <p className={classes.registerContent}>Don't have an account yet? Sign Up</p>
       </div>
       <div className={classes.waveFooter}>
-        <WaveFooter/>
+        <WaveFooter />
       </div>
     </div>
   )

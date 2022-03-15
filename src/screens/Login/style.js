@@ -7,7 +7,8 @@ export const useStyles = makeStyles({
     width: '100vw',
     height: '100vh',
     backgroundColor: '#224957',
-    position: 'relative'
+    position: 'relative',
+    overflow: 'auto'
   },
   formWrapper: {
     width: 430,
