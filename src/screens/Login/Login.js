@@ -7,6 +7,11 @@ import CustomDefaultButton from '../../components/Button/CustomDefaultButton'
 import clsx from 'clsx'
 import WaveFooter from '../../components/Footer/WaveFooter'
 import { peckPortalClient } from '../../Api'
+import validate from 'validate.js'
+
+const schema = {
+  
+}
 
 export const LoginScreen = (props) => {
   const classes = useStyles()
