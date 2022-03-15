@@ -1,1 +1,1 @@
-export { RegisterForm as default } from './Register'
+export { RegisterScreen as default } from './Register'

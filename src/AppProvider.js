@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import LoginForm from './screens/Login'
-import RegisterForm from './screens/Register'
+import LoginScreen from './screens/Login'
+import RegisterScreen from './screens/Register'
 
 const AppProvider = (props) => {
 
@@ -17,8 +17,9 @@ const AppProvider = (props) => {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<LoginForm/>} />
-          <Route path='/register' element={<RegisterForm/>} />
+          <Route path='/' element={<LoginScreen/>} />
+          <Route path='/login' element={<LoginScreen/>} />
+          <Route path='/register' element={<RegisterScreen/>} />
         </Routes>
       </BrowserRouter>
     </div>
