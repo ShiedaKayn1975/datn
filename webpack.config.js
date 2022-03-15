@@ -92,7 +92,7 @@ module.exports = (env, argv) => {
       historyApiFallback: true,
       contentBase: './',
       // hot: true,
-      port: 8080,
+      port: 8035,
       compress: true,
       disableHostCheck: true,   // That solved it
       open: true
