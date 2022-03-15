@@ -54,6 +54,13 @@ export const LoginScreen = (props) => {
           </div>
         </div>
       </div>
+      <div className={classes.registerTitle}
+        onClick={() => {
+          window.location.href = '/register'
+        }}
+      >
+          <p className={classes.registerContent}>Don't have an account yet? Sign Up</p>
+      </div>
       <div className={classes.waveFooter}>
         <WaveFooter/>
       </div>

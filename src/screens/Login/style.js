@@ -6,7 +6,8 @@ export const useStyles = makeStyles({
   root: {
     width: '100vw',
     height: '100vh',
-    backgroundColor: '#224957'
+    backgroundColor: '#224957',
+    position: 'relative'
   },
   formWrapper: {
     width: 430,
@@ -14,7 +15,7 @@ export const useStyles = makeStyles({
     margin: 'auto',
   },
   formWrapperContent: {
-    paddingTop: '50%'
+    paddingTop: '35%'
   },
   titleWrapper: {
     width: '100%',
@@ -75,5 +76,20 @@ export const useStyles = makeStyles({
     bottom: 0,
     left: 0,
     width: '100%'
+  },
+  registerTitle: {
+    position: 'absolute',
+    top: 15,
+    right: 30
+  },
+  registerContent: {
+    color: '#20DF7F',
+    fontSize: 13,
+    textDecoration: 'underline',
+    textDecorationColor: '#20DF7F',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#00ff7f'
+    }
   }
 })
