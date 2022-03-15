@@ -6,7 +6,7 @@ import GreyCheckbox from '../../components/Checkbox/GreyCheckbox'
 import CustomDefaultButton from '../../components/Button/CustomDefaultButton'
 import clsx from 'clsx'
 import WaveFooter from '../../components/Footer/WaveFooter'
-import { peckPortalClient } from '../../Api'
+import { peckPortalClient } from '../../api'
 import validate from 'validate.js'
 
 const schema = {
