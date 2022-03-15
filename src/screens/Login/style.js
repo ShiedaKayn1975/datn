@@ -39,7 +39,7 @@ export const useStyles = makeStyles({
     width: '100%'
   },
   input: {
-    width: '94%',
+    width: '100%',
     marginBottom: 30
   },
   extraWrapper: {

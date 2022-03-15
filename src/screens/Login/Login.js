@@ -24,14 +24,14 @@ export const LoginScreen = (props) => {
               aria-label="Username"
               placeholder="Username or Email"
               className={classes.input}
-              fullwidth={true}
+              // fullwidth={true}
             />
             <GreyInput
               aria-label="Password"
               placeholder="Password"
               type="password"
               className={classes.input}
-              fullwidth={true}
+              // fullwidth={true}
             />
           </div>
           <div className={classes.extraWrapper}>
