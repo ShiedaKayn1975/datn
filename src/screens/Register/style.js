@@ -1,4 +1,4 @@
-import { CssConstant } from "../../assets/css/constant"
+import { CssConstant } from "../../assets/constant/constant"
 import { makeStyles } from '@mui/styles'
 
 export const useStyles = makeStyles({

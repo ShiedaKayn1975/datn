@@ -1,4 +1,4 @@
-import { CssConstant } from "../../assets/css/constant"
+import { CssConstant } from "../../assets/constant/constant"
 import { makeStyles } from '@mui/styles'
 
 export const useStyles = makeStyles({
@@ -41,6 +41,8 @@ export const useStyles = makeStyles({
   },
   input: {
     width: '100%',
+  },
+  inputWrapper: {
     marginBottom: 30
   },
   extraWrapper: {

@@ -8,14 +8,26 @@ import clsx from 'clsx'
 import WaveFooter from '../../components/Footer/WaveFooter'
 import { peckPortalClient } from '../../api'
 import validate from 'validate.js'
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 
 const schema = {
-  
+  username: {
+    presence: true,
+    email: true
+  },
+  password: {
+    presence: true,
+    length: {
+      minimum: 6,
+      message: "Password must be at least 6 characters"
+    }
+  }
 }
 
 export const LoginScreen = (props) => {
   const classes = useStyles()
   const [form, setForm] = useState(null)
+  const [errors, setErrors] = useState({})
 
   const handleChange = (event) => {
     let formData = form || {}
@@ -24,9 +36,23 @@ export const LoginScreen = (props) => {
   }
 
   const signIn = () => {
-    if(formData){
+    if (form) {
       /// validate form
-      peckPortalClient.login(formData.username, formData.password)
+      const error = validate(form, schema)
+      setErrors(error)
+
+      if (!error) {
+        peckPortalClient.login({
+          username: form.username, 
+          password: form.password,
+          onSuccess: (response) => {
+
+          },
+          onError: (response) => {
+            
+          }
+        })
+      }
     }
   }
 
@@ -39,23 +65,35 @@ export const LoginScreen = (props) => {
           </div>
           <div className={classes.description}>Sign in and Let's start!</div>
           <div className={classes.textfieldWrapper}>
-            <GreyInput
-              aria-label="Username"
-              placeholder="Username or Email"
-              className={classes.input}
-              // fullwidth={true}
-              name={'username'}
-              onChange={handleChange}
-            />
-            <GreyInput
-              aria-label="Password"
-              placeholder="Password"
-              type="password"
-              name="password"
-              className={classes.input}
-              onChange={handleChange}
-            // fullwidth={true}
-            />
+            <div
+              className={classes.inputWrapper}
+            >
+              <GreyInput
+                aria-label="Username"
+                placeholder="Enter your email"
+                className={classes.input}
+                name={'username'}
+                onChange={handleChange}
+                autoFocus
+                error={errors['username']}
+                erroricon={<ReportGmailerrorredIcon/>}
+              />
+            </div>
+
+            <div
+              className={classes.inputWrapper}
+            >
+              <GreyInput
+                aria-label="Password"
+                placeholder="Password"
+                type="password"
+                name="password"
+                className={classes.input}
+                onChange={handleChange}
+                error={errors['password']}
+                erroricon={<ReportGmailerrorredIcon/>}
+              />
+            </div>
           </div>
           <div className={classes.extraWrapper}>
             <div className={classes.rememberMe}>
