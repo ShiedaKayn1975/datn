@@ -40,7 +40,9 @@ export const useStyles = makeStyles({
     width: '100%'
   },
   input: {
-    width: '100%',
+    width: '100%'
+  },
+  inputWrapper: {
     marginBottom: 30
   },
   extraWrapper: {

@@ -19,7 +19,7 @@ const schema = {
     presence: true,
     length: {
       minimum: 6,
-      message: "Password must be at least 6 characters"
+      message: "must be at least 6 characters"
     }
   }
 }
@@ -49,7 +49,7 @@ export const LoginScreen = (props) => {
 
           },
           onError: (response) => {
-            
+
           }
         })
       }
@@ -75,6 +75,7 @@ export const LoginScreen = (props) => {
                 name={'username'}
                 onChange={handleChange}
                 autoFocus
+                value={form?.username}
                 error={errors['username']}
                 erroricon={<ReportGmailerrorredIcon/>}
               />
@@ -88,6 +89,7 @@ export const LoginScreen = (props) => {
                 placeholder="Password"
                 type="password"
                 name="password"
+                value={form?.password}
                 className={classes.input}
                 onChange={handleChange}
                 error={errors['password']}
