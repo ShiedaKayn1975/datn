@@ -41,26 +41,29 @@ export const RegisterScreen = (props) => {
   }
 
   const signUp = () => {
-    if(formData){
+    if (formData) {
       const error = validate(formData, schema)
 
       if (!error) {
-        peckPortalClient.signUp({
+        peckPortalClient.signup({
           formData: formData,
           onSuccess: (response) => {
-            // save data to redux
             const data = response.data
 
             const account = data.account
             const token = data.token
+
+            // save token by cookie
             const cookieClient = new Cookies()
-            cookieClient.set('token', token, { path: '/', domain: 'localhost'})
+            cookieClient.set('token', token, { path: '/', domain: 'localhost' })
+
+            // save account data to redux
           },
           onError: (error) => {
 
           }
         })
-      }else{
+      } else {
         setErrors(error)
       }
     }
@@ -87,7 +90,7 @@ export const RegisterScreen = (props) => {
                 onChange={handleChange}
                 autoFocus
                 error={errors['email']}
-                erroricon={<ReportGmailerrorredIcon/>}
+                erroricon={<ReportGmailerrorredIcon />}
               />
             </div>
             <div
@@ -101,7 +104,7 @@ export const RegisterScreen = (props) => {
                 name={'password'}
                 onChange={handleChange}
                 error={errors['password']}
-                erroricon={<ReportGmailerrorredIcon/>}
+                erroricon={<ReportGmailerrorredIcon />}
               />
             </div>
             <div
@@ -115,7 +118,7 @@ export const RegisterScreen = (props) => {
                 name={'password_confirmation'}
                 onChange={handleChange}
                 error={errors['password_confirmation']}
-                erroricon={<ReportGmailerrorredIcon/>}
+                erroricon={<ReportGmailerrorredIcon />}
               />
             </div>
           </div>
