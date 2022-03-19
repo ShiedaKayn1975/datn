@@ -13,7 +13,9 @@ peckPortalClient.login = ({ username, password, onSuccess, onError }) => {
     password: password
   }
 
-  peckPortalClient.post(`${config.peckPortalApi}/api/v1/sign_in`, formData).then(response => {
+  peckPortalClient.post(`${config.peckPortalApi}/api/v1/sign_in`, formData, {
+    headers: { 'Content-Type': 'application/json' }
+  }).then(response => {
     if (onSuccess) {
       onSuccess(response)
     }
@@ -25,7 +27,9 @@ peckPortalClient.login = ({ username, password, onSuccess, onError }) => {
 }
 
 peckPortalClient.signUp = ({ formData, onSuccess, onError }) => {
-  peckPortalClient.post(`${config.peckPortalApi}/api/v1/sign_up`).then(response => {
+  peckPortalClient.post(`${config.peckPortalApi}/api/v1/signup`, formData, {
+    headers: { 'Content-Type': 'application/json' }
+  }).then(response => {
     if (onSuccess) {
       onSuccess(response)
     }

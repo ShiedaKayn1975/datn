@@ -11,7 +11,7 @@ import validate from 'validate.js'
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 
 const schema = {
-  username: {
+  email: {
     presence: true,
     email: true
   },
@@ -39,11 +39,10 @@ export const LoginScreen = (props) => {
     if (form) {
       /// validate form
       const error = validate(form, schema)
-      setErrors(error)
 
       if (!error) {
         peckPortalClient.login({
-          username: form.username, 
+          email: form.email, 
           password: form.password,
           onSuccess: (response) => {
 
@@ -52,6 +51,8 @@ export const LoginScreen = (props) => {
 
           }
         })
+      }else{
+        setErrors(error)
       }
     }
   }
@@ -69,14 +70,14 @@ export const LoginScreen = (props) => {
               className={classes.inputWrapper}
             >
               <GreyInput
-                aria-label="Username"
+                aria-label="email"
                 placeholder="Enter your email"
                 className={classes.input}
-                name={'username'}
+                name={'email'}
                 onChange={handleChange}
                 autoFocus
-                value={form?.username}
-                error={errors['username']}
+                value={form?.email}
+                error={errors['email']}
                 erroricon={<ReportGmailerrorredIcon/>}
               />
             </div>

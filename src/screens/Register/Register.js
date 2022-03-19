@@ -9,9 +9,10 @@ import WaveFooter from '../../components/Footer/WaveFooter'
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import { peckPortalClient } from '../../api'
 import validate from 'validate.js'
+import Cookies from 'universal-cookie'
 
 const schema = {
-  username: {
+  email: {
     presence: true,
     email: true
   },
@@ -24,10 +25,6 @@ const schema = {
   },
   password_confirmation: {
     presence: true,
-    length: {
-      minimum: 6,
-      message: "must be at least 6 characters"
-    },
     equality: "password"
   }
 }
@@ -46,18 +43,25 @@ export const RegisterScreen = (props) => {
   const signUp = () => {
     if(formData){
       const error = validate(formData, schema)
-      setErrors(error)
 
       if (!error) {
         peckPortalClient.signUp({
           formData: formData,
           onSuccess: (response) => {
+            // save data to redux
+            const data = response.data
 
+            const account = data.account
+            const token = data.token
+            const cookieClient = new Cookies()
+            cookieClient.set('token', token, { path: '/', domain: 'localhost'})
           },
-          onError: (response) => {
+          onError: (error) => {
 
           }
         })
+      }else{
+        setErrors(error)
       }
     }
   }
@@ -76,13 +80,13 @@ export const RegisterScreen = (props) => {
               className={classes.inputWrapper}
             >
               <GreyInput
-                aria-label="Username"
+                aria-label="email"
                 placeholder="Enter your email"
                 className={classes.input}
-                name={'username'}
+                name={'email'}
                 onChange={handleChange}
                 autoFocus
-                error={errors['username']}
+                error={errors['email']}
                 erroricon={<ReportGmailerrorredIcon/>}
               />
             </div>
