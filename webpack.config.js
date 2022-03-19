@@ -97,5 +97,11 @@ module.exports = (env, argv) => {
       disableHostCheck: true,   // That solved it
       open: true
     },
+    externals: {
+      // global app config object
+      config: JSON.stringify({
+        peckPortalApi: process.env.PECK_PORTAL_API_URL
+      })
+    },
   }
 };
