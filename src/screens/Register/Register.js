@@ -34,6 +34,8 @@ export const RegisterScreen = (props) => {
   const [formData, setFormData] = useState(null)
   const [errors, setErrors] = useState({})
 
+  console.log(props, "pdp")
+
   const handleChange = (event) => {
     let form = formData || {}
     form[event.target.name] = event.target.value
