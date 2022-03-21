@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Redirect, Router} from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Redirect, Router } from 'react-router-dom'
 import LoginScreen from './screens/Login'
 import RegisterScreen from './screens/Register'
 import { Provider } from 'react-redux'
@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { peckPortalClient } from './api'
 import AppContext from './AppContext'
 import { createBrowserHistory } from 'history'
+import PageNotFound from './screens/404'
 
 const loggerStore = store => next => action => {
   console.group(action.type)
@@ -47,12 +48,16 @@ const AppInitialize = (props) => {
     )
   }
 
-  if(!peckPortalClient.hasToken()){
+  if (!peckPortalClient.hasToken()) {
     return props.children(false, {})
   }
 
+  if (loadingState.currentUser == 'validating') {
+    return "validating"
+  }
+
   if (loadingState.currentUser == 'failed') {
-    return <>Error</>
+    return <PageNotFound />
   }
 
   return <>Loading</>
@@ -83,11 +88,14 @@ const AppProvider = (props) => {
         <BrowserRouter history={appHistory}>
           <AppInitialize>
             {
-              ({appReady, currentUser}) => (
+              ({ appReady, currentUser }) => (
                 <Routes>
-                  <Route exact path='/' element={<SignInWrapper/>} />
-                  <Route exact path='/login' element={<SignInWrapper/>} />
-                  <Route exact path='/register' component={<SignUpWrapper/>} />
+                  <Route exact path='/' element={<SignInWrapper />} />
+                  <Route exact path='/login' element={<SignInWrapper />} />
+                  <Route exact path='/register' element={<SignUpWrapper />} />
+                  <Route path='/404' element={<PageNotFound/>} />
+
+
                 </Routes>
               )
             }
