@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Redirect, Router, Switch } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Redirect, Router} from 'react-router-dom'
 import LoginScreen from './screens/Login'
 import RegisterScreen from './screens/Register'
 import { Provider } from 'react-redux'
@@ -31,7 +31,7 @@ const AppInitialize = (props) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!currentUser) {
+    if (!currentUser && peckPortalClient.hasToken()) {
       dispatch(loadProfile())
     }
   }, [currentUser])
@@ -40,10 +40,15 @@ const AppInitialize = (props) => {
     return (
       <AppContext.Provider value={{ currentUser }}>
         <props.children
+          appReady={true}
           currentUser={currentUser}
         />
       </AppContext.Provider>
     )
+  }
+
+  if(!peckPortalClient.hasToken()){
+    return props.children(false, {})
   }
 
   if (loadingState.currentUser == 'failed') {
@@ -75,22 +80,15 @@ const AppProvider = (props) => {
   return (
     <div>
       <Provider store={appStore}>
-        {/* <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<LoginScreen />} />
-            <Route path='/login' element={<LoginScreen />} />
-            <Route path='/register' element={<RegisterScreen />} />
-          </Routes>
-        </BrowserRouter> */}
         <BrowserRouter history={appHistory}>
           <AppInitialize>
             {
-              (currentUser) => (
-                <Switch>
-                  <Route exact path='/' component={SignInWrapper} />
-                  <Route exact path='/login' component={SignInWrapper} />
-                  <Route exact path='/register' component={SignUpWrapper} />
-                </Switch>
+              ({appReady, currentUser}) => (
+                <Routes>
+                  <Route exact path='/' element={<SignInWrapper/>} />
+                  <Route exact path='/login' element={<SignInWrapper/>} />
+                  <Route exact path='/register' component={<SignUpWrapper/>} />
+                </Routes>
               )
             }
           </AppInitialize>
