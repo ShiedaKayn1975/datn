@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from 'config'
+import Cookies from 'universal-cookie'
 
 export const peckPortalClient = axios.create({
   baseURL: config.peckPortalApi,
@@ -38,6 +39,15 @@ peckPortalClient.signup = ({ formData, onSuccess, onError }) => {
       onError(error)
     }
   })
+}
+
+peckPortalClient.hasToken = () => {
+  const cookie = new Cookies()
+  if(cookie.get('token')){
+    return true
+  }
+
+  return false
 }
 
 export default peckPortalClient
