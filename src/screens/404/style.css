@@ -96,16 +96,16 @@
   content: "> ";
 }
 
-a {
+.a_notfound {
   color: #fff;
   text-decoration: none;
 }
 
-a::before {
+.a_notfound::before {
   content: "[";
 }
 
-a::after {
+.a_notfound::after {
   content: "]";
 }
 

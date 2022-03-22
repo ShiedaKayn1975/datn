@@ -11,6 +11,8 @@ import AppContext from './AppContext'
 import { createBrowserHistory } from 'history'
 import PageNotFound from './screens/404'
 import Checkpoint from './screens/Checkpoint'
+import { ThemeProvider } from '@mui/material/styles'
+import theme from './themes'
 
 const loggerStore = store => next => action => {
   console.group(action.type)
@@ -31,7 +33,6 @@ const AppInitialize = (props) => {
   const currentUser = useSelector(state => state.currentUser)
   const loadingState = useSelector(state => state.loadingState)
   const dispatch = useDispatch()
-  const location = useLocation()
 
   useEffect(() => {
     if (!currentUser && peckPortalClient.hasToken()) {
@@ -84,32 +85,33 @@ const AppProvider = (props) => {
   return (
     <div>
       <Provider store={appStore}>
-        <BrowserRouter history={appHistory}>
-          <AppInitialize>
-            {
-              ({ appReady, currentUser, loadingState }) => (
-                <>
-                  {
-                    !(loadingState?.currentUser == 'validating') ?
-                      <Routes>
-                        <Route exact path='/checkpoint' element={<Checkpoint />} />
-                        <Route path="*" element={<Navigate to="/checkpoint" replace />} />
-                      </Routes>
-                      :
-                      <Routes>
-                        <Route exact path='/' element={<SignInWrapper />} />
-                        <Route exact path='/login' element={<SignInWrapper />} />
-                        <Route exact path='/register' element={<SignUpWrapper />} />
-                        <Route exact path='/checkpoint' element={<Checkpoint />} />
-                        <Route path='/404' element={<PageNotFound />} />
-                        <Route path="*" element={<Navigate to="/404" replace />} />
-                      </Routes>
-                  }
-                </>
-              )
-            }
-          </AppInitialize>
-        </BrowserRouter>
+        <ThemeProvider theme={theme()}>
+          <BrowserRouter history={appHistory}>
+            <AppInitialize>
+              {
+                ({ appReady, currentUser, loadingState }) => (
+                  <>
+                    {
+                      (currentUser?.status == 'validating') ?
+                        <Routes>
+                          <Route exact path='/checkpoint' element={<Checkpoint />} />
+                          <Route path="*" element={<Navigate to="/checkpoint" replace />} />
+                        </Routes>
+                        :
+                        <Routes>
+                          <Route exact path='/' element={<SignInWrapper />} />
+                          <Route exact path='/login' element={<SignInWrapper />} />
+                          <Route exact path='/register' element={<SignUpWrapper />} />
+                          <Route path='/404' element={<PageNotFound />} />
+                          <Route path="*" element={<Navigate to="/404" replace />} />
+                        </Routes>
+                    }
+                  </>
+                )
+              }
+            </AppInitialize>
+          </BrowserRouter>
+        </ThemeProvider>
       </Provider>
     </div>
   )

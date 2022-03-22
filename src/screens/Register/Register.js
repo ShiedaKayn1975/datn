@@ -7,6 +7,8 @@ import WaveFooter from '../../components/Footer/WaveFooter'
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import validate from 'validate.js'
 import Cookies from 'universal-cookie'
+import { loadProfile } from '../../actions/profileAction'
+import { useDispatch } from 'react-redux'
 
 const schema = {
   email: {
@@ -30,6 +32,7 @@ export const RegisterScreen = (props) => {
   const classes = useStyles()
   const [formData, setFormData] = useState(null)
   const [errors, setErrors] = useState({})
+  const dispatch = useDispatch()
 
   const handleChange = (event) => {
     let form = formData || {}
@@ -54,7 +57,7 @@ export const RegisterScreen = (props) => {
             const cookieClient = new Cookies()
             cookieClient.set('token', token, { path: '/', domain: 'localhost' })
 
-            // save account data to redux
+            dispatch(loadProfile())
           },
           onError: (error) => {
 

@@ -13,7 +13,7 @@ export const loadProfile = () => dispatch => {
 	let header = {}
 	if (token) {
 		token = 'Bearer ' + token
-		header['Authorizaton'] = token
+		header['Authorization'] = token
 	}
 
 	return peckPortalClient.get('/api/v1/profile', { headers: header }).then(response => {
