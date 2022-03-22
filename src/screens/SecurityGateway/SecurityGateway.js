@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Checkpoint = (props) => {
+export const SecurityGateway = (props) => {
   return (
     <>
       Checkpoint dd

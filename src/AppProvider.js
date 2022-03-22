@@ -10,7 +10,7 @@ import { peckPortalClient } from './api'
 import AppContext from './AppContext'
 import { createBrowserHistory } from 'history'
 import PageNotFound from './screens/404'
-import Checkpoint from './screens/Checkpoint'
+import SecurityGateway from './screens/SecurityGateway'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './themes'
 
@@ -94,8 +94,8 @@ const AppProvider = (props) => {
                     {
                       (currentUser?.status == 'validating') ?
                         <Routes>
-                          <Route exact path='/checkpoint' element={<Checkpoint />} />
-                          <Route path="*" element={<Navigate to="/checkpoint" replace />} />
+                          <Route exact path='/security_gateway' element={<SecurityGateway />} />
+                          <Route path="*" element={<Navigate to="/security_gateway" replace />} />
                         </Routes>
                         :
                         <Routes>
