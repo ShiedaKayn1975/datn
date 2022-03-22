@@ -41,7 +41,7 @@ export const LoginScreen = (props) => {
       const error = validate(form, schema)
 
       if (!error) {
-        peckPortalClient.login({
+        props.signin({
           email: form.email, 
           password: form.password,
           onSuccess: (response) => {
