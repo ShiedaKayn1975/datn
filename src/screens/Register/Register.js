@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import { useStyles } from './style'
-import { TextField, Checkbox } from '@mui/material'
 import GreyInput from '../../components/Input/GreyInput'
-import GreyCheckbox from '../../components/Checkbox/GreyCheckbox'
 import CustomDefaultButton from '../../components/Button/CustomDefaultButton'
 import clsx from 'clsx'
 import WaveFooter from '../../components/Footer/WaveFooter'
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { peckPortalClient } from '../../api'
 import validate from 'validate.js'
 import Cookies from 'universal-cookie'
+import { loadProfile } from '../../actions/profileAction'
+import { useDispatch } from 'react-redux'
 
 const schema = {
   email: {
@@ -33,8 +32,7 @@ export const RegisterScreen = (props) => {
   const classes = useStyles()
   const [formData, setFormData] = useState(null)
   const [errors, setErrors] = useState({})
-
-  console.log(props, "pdp")
+  const dispatch = useDispatch()
 
   const handleChange = (event) => {
     let form = formData || {}
@@ -47,7 +45,7 @@ export const RegisterScreen = (props) => {
       const error = validate(formData, schema)
 
       if (!error) {
-        peckPortalClient.signup({
+        props.signup({
           formData: formData,
           onSuccess: (response) => {
             const data = response.data
@@ -59,7 +57,7 @@ export const RegisterScreen = (props) => {
             const cookieClient = new Cookies()
             cookieClient.set('token', token, { path: '/', domain: 'localhost' })
 
-            // save account data to redux
+            dispatch(loadProfile())
           },
           onError: (error) => {
 

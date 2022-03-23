@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Redirect, Router } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Redirect, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import LoginScreen from './screens/Login'
 import RegisterScreen from './screens/Register'
 import { Provider } from 'react-redux'
@@ -10,6 +10,9 @@ import { peckPortalClient } from './api'
 import AppContext from './AppContext'
 import { createBrowserHistory } from 'history'
 import PageNotFound from './screens/404'
+import SecurityGateway from './screens/SecurityGateway'
+import { ThemeProvider } from '@mui/material/styles'
+import theme from './themes'
 
 const loggerStore = store => next => action => {
   console.group(action.type)
@@ -43,6 +46,7 @@ const AppInitialize = (props) => {
         <props.children
           appReady={true}
           currentUser={currentUser}
+          loadingState={loadingState}
         />
       </AppContext.Provider>
     )
@@ -50,10 +54,6 @@ const AppInitialize = (props) => {
 
   if (!peckPortalClient.hasToken()) {
     return props.children(false, {})
-  }
-
-  if (loadingState.currentUser == 'validating') {
-    return "validating"
   }
 
   if (loadingState.currentUser == 'failed') {
@@ -66,14 +66,14 @@ const AppInitialize = (props) => {
 const withUser = (Component, extraProps = {}) => {
   return function (props) {
     const currentUser = useSelector(state => state.currentUser)
-    return currentUser ? <Component {...props} {...extraProps} /> : <Redirect to='/login' />
+    return currentUser ? <Component {...props} {...extraProps} /> : <Navigate to="/" replace />
   }
 }
 
 const withoutUser = (Component, extraProps = {}) => {
   return function (props) {
     let currentUser = useSelector(state => state.currentUser)
-    return currentUser ? <Redirect to='/' /> : <Component {...props} {...extraProps} />
+    return currentUser ? <Navigate to="/" replace /> : <Component {...props} {...extraProps} />
   }
 }
 
@@ -85,22 +85,33 @@ const AppProvider = (props) => {
   return (
     <div>
       <Provider store={appStore}>
-        <BrowserRouter history={appHistory}>
-          <AppInitialize>
-            {
-              ({ appReady, currentUser }) => (
-                <Routes>
-                  <Route exact path='/' element={<SignInWrapper />} />
-                  <Route exact path='/login' element={<SignInWrapper />} />
-                  <Route exact path='/register' element={<SignUpWrapper />} />
-                  <Route path='/404' element={<PageNotFound/>} />
-
-
-                </Routes>
-              )
-            }
-          </AppInitialize>
-        </BrowserRouter>
+        <ThemeProvider theme={theme()}>
+          <BrowserRouter history={appHistory}>
+            <AppInitialize>
+              {
+                ({ appReady, currentUser, loadingState }) => (
+                  <>
+                    {
+                      (currentUser?.status == 'validating') ?
+                        <Routes>
+                          <Route exact path='/security_gateway' element={<SecurityGateway />} />
+                          <Route path="*" element={<Navigate to="/security_gateway" replace />} />
+                        </Routes>
+                        :
+                        <Routes>
+                          <Route exact path='/' element={<SignInWrapper />} />
+                          <Route exact path='/login' element={<SignInWrapper />} />
+                          <Route exact path='/register' element={<SignUpWrapper />} />
+                          <Route path='/404' element={<PageNotFound />} />
+                          <Route path="*" element={<Navigate to="/404" replace />} />
+                        </Routes>
+                    }
+                  </>
+                )
+              }
+            </AppInitialize>
+          </BrowserRouter>
+        </ThemeProvider>
       </Provider>
     </div>
   )
