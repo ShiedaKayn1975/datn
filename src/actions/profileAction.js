@@ -20,8 +20,14 @@ export const loadProfile = () => dispatch => {
 		dispatch({
 			type: 'PROFILE_LOADING_SUCCESS',
 			payload: {
-				user: response.data
+				user: response.data.user
 			}
+		})
+
+		dispatch({
+			type: 'UPDATE_SECURITY_GATEWAYS',
+			steps: response.data.account_setup_steps,
+			currentStep: response.data.current_step
 		})
 
 		dispatch({
