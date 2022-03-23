@@ -33,7 +33,7 @@ export const LoginScreen = (props) => {
   const handleChange = (event) => {
     let formData = form || {}
     formData[event.target.name] = event.target.value
-    setForm(formData)
+    setForm({...formData})
   }
 
   const signIn = () => {
@@ -77,7 +77,7 @@ export const LoginScreen = (props) => {
                 name={'email'}
                 onChange={handleChange}
                 autoFocus
-                value={form?.email}
+                value={form?.email || ''}
                 error={errors['email']}
                 erroricon={<ReportGmailerrorredIcon/>}
               />
