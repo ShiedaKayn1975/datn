@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-## BA
+## BA Ver 1
 
 - Cho phép người dùng có thể đấu giá hoặc đưa sản phẩm lên sàn để đấu giá.
 - Người dùng có thể xem các phiên đấu giá đang diễn ra một cách trực tiếp .
@@ -14,9 +14,18 @@
 - Sau mỗi phiên đấu giá thành công, người bán sẽ được tăng mức độ uy tín.
 - Phí mỗi phiên đấu giá là 5% giá trị của sản phẩm
 
+## BA Ver 2
+
 ## Tech
 
 Build theo mô hình microservice. 
 
 - [ReactJS] - Frontend
 - [Ruby On Rails] - Backend
+
+## Run
+
+Pull nhánh dev về
+
+- npm install
+- npm start
