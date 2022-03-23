@@ -12,8 +12,8 @@ module.exports = (env, argv) => {
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: argv.mode == 'development' ?`[name].bundle.version_1.0.2.js`: `[contenthash].bundle.version_1.0.2.js`,
-      chunkFilename: argv.mode == 'development' ? `[name].bundle.version_1.0.2.js`: `[contenthash].bundle.version_1.0.2.js`,
+      filename: argv.mode == 'development' ? `[name].bundle.version_1.0.2.js` : `[contenthash].bundle.version_1.0.2.js`,
+      chunkFilename: argv.mode == 'development' ? `[name].bundle.version_1.0.2.js` : `[contenthash].bundle.version_1.0.2.js`,
     },
     optimization: {
       runtimeChunk: 'single',
@@ -80,8 +80,8 @@ module.exports = (env, argv) => {
         excludeChunks: Object.keys({})
       }),
       new MiniCssExtractPlugin({
-        filename:  argv.mode == 'development' ? '[name].css': '[contenthash].css',
-        chunkFilename: argv.mode == 'development' ? '[name].css': '[contenthash].css',
+        filename: argv.mode == 'development' ? '[name].css' : '[contenthash].css',
+        chunkFilename: argv.mode == 'development' ? '[name].css' : '[contenthash].css',
       }),
       new webpack.ProvidePlugin({
         'window.Quill': 'quill/dist/quill.js',
