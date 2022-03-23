@@ -77,7 +77,7 @@ const withoutUser = (Component, extraProps = {}) => {
   }
 }
 
-const SignInWrapper = withoutUser(LoginScreen, { sigin: peckPortalClient.sigin })
+const SignInWrapper = withoutUser(LoginScreen, { sigin: peckPortalClient.signin })
 const SignUpWrapper = withoutUser(RegisterScreen, { signup: peckPortalClient.signup })
 
 const AppProvider = (props) => {
