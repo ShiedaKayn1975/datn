@@ -9,6 +9,7 @@ import WaveFooter from '../../components/Footer/WaveFooter'
 import { peckPortalClient } from '../../api'
 import validate from 'validate.js'
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import { toast } from 'react-toastify'
 
 const schema = {
   email: {
@@ -47,8 +48,8 @@ export const LoginScreen = (props) => {
           onSuccess: (response) => {
 
           },
-          onError: (response) => {
-
+          onError: (error) => {
+            toast.error(error)
           }
         })
       }else{

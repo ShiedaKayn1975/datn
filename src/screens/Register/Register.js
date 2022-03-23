@@ -9,6 +9,7 @@ import validate from 'validate.js'
 import Cookies from 'universal-cookie'
 import { loadProfile } from '../../actions/profileAction'
 import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const schema = {
   email: {
@@ -60,7 +61,7 @@ export const RegisterScreen = (props) => {
             dispatch(loadProfile())
           },
           onError: (error) => {
-
+            toast.error(error)
           }
         })
       } else {
