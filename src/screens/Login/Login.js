@@ -10,6 +10,9 @@ import { peckPortalClient } from '../../api'
 import validate from 'validate.js'
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import { toast } from 'react-toastify'
+import Cookies from 'universal-cookie'
+import { useDispatch } from 'react-redux'
+import { loadProfile } from '../../actions/profileAction'
 
 const schema = {
   email: {
@@ -29,6 +32,9 @@ export const LoginScreen = (props) => {
   const classes = useStyles()
   const [form, setForm] = useState(null)
   const [errors, setErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const dispatch = useDispatch()
 
   const handleChange = (event) => {
     let formData = form || {}
@@ -38,17 +44,23 @@ export const LoginScreen = (props) => {
 
   const signIn = () => {
     if (form) {
-      /// validate form
       const error = validate(form, schema)
 
       if (!error) {
+        setIsSubmitting(true)
         props.signin({
-          email: form.email, 
-          password: form.password,
+          formData: form,
           onSuccess: (response) => {
+            let token = response.data.token
+            const cookieClient = new Cookies()
+            cookieClient.set('token', token, { path: '/', domain: 'localhost' })
 
+            setIsSubmitting(false)
+            toast.success("Login success")
+            dispatch(loadProfile())
           },
           onError: (error) => {
+            setIsSubmitting(false)
             toast.error(error)
           }
         })
@@ -91,7 +103,7 @@ export const LoginScreen = (props) => {
                 placeholder="Password"
                 type="password"
                 name="password"
-                value={form?.password}
+                value={form?.password || ''}
                 className={classes.input}
                 onChange={handleChange}
                 error={errors['password']}
@@ -114,6 +126,7 @@ export const LoginScreen = (props) => {
             <CustomDefaultButton
               style={{ width: '100%' }}
               onClick={signIn}
+              loading={isSubmitting}
             >
               Sign In
             </CustomDefaultButton>

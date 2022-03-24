@@ -1,8 +1,8 @@
 import React from 'react'
-import Stack from '@mui/material/Stack';
 import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 import { green } from '../../assets/constant'
+import CircularProgress from '@mui/material/CircularProgress';
 
 const CustomButton = styled('button')`
   font-family: 'Lexend Deca', sans-serif;
@@ -36,7 +36,14 @@ const CustomButton = styled('button')`
 `;
 
 const CustomDefaultButton = (props) => {
-  return <ButtonUnstyled {...props} component={CustomButton} />
+  return (
+    <ButtonUnstyled
+      {...props}
+      component={CustomButton}
+    >
+      { props.loading ? <CircularProgress size={20} /> : props.children}
+    </ButtonUnstyled>
+  )
 }
 
 export default CustomDefaultButton
