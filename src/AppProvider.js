@@ -66,14 +66,14 @@ const AppInitialize = (props) => {
 const withUser = (Component, extraProps = {}) => {
   return function (props) {
     const currentUser = useSelector(state => state.currentUser)
-    return currentUser ? <Component {...props} {...extraProps} /> : <Navigate to="/" replace />
+    return currentUser ? <Component {...props} {...extraProps} /> : <Navigate to="/" />
   }
 }
 
 const withoutUser = (Component, extraProps = {}) => {
   return function (props) {
     let currentUser = useSelector(state => state.currentUser)
-    return currentUser ? <Navigate to="/" replace /> : <Component {...props} {...extraProps} />
+    return currentUser ? <Navigate to="/" /> : <Component {...props} {...extraProps} />
   }
 }
 
@@ -95,7 +95,7 @@ const AppProvider = (props) => {
                       (currentUser?.status == 'validating') ?
                         <Routes>
                           <Route exact path='/security_gateway' element={<SecurityGateway />} />
-                          <Route path="*" element={<Navigate to="/security_gateway" replace />} />
+                          <Route path="*" element={<Navigate to="/security_gateway" />} />
                         </Routes>
                         :
                         <Routes>
@@ -103,7 +103,7 @@ const AppProvider = (props) => {
                           <Route exact path='/login' element={<SignInWrapper />} />
                           <Route exact path='/register' element={<SignUpWrapper />} />
                           <Route path='/404' element={<PageNotFound />} />
-                          <Route path="*" element={<Navigate to="/404" replace />} />
+                          <Route path="*" element={<Navigate to="/404" />} />
                         </Routes>
                     }
                   </>
