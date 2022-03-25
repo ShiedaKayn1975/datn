@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { ConfirmBirthday } from './SecuritySteps'
 
 const SecureRenderer = (props) => {
   const security = useSelector(state => state.securityGateway)
@@ -13,7 +14,7 @@ const SecureRenderer = (props) => {
 
   return (
     <>
-  o
+      <ConfirmBirthday/>
     </>
   )
 }
