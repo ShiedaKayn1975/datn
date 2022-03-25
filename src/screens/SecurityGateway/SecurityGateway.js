@@ -4,13 +4,20 @@ import MainCardWrapper from './MainCardWrapper'
 import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import SecureRenderer from './SecureRenderer'
 
 export const SecurityGateway = (props) => {
   const theme = useTheme()
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-  const secu = useSelector(state => state.securityGateway)
-  console.log(secu)
+
+  const onIgnoreStep = () => {
+
+  }
+
+  const onSubmitStep = () => {
+
+  }
+
   return (
     <>
       <SecurityWrapper>
@@ -29,13 +36,17 @@ export const SecurityGateway = (props) => {
                       >
                         <Grid item>
                           <Stack alignItems="center" justifyContent="center" spacing={1}>
-                            <Typography
+                            {/* <Typography
                               color={theme.palette.secondary.main}
                               gutterBottom
                               variant={matchDownSM ? 'h3' : 'h2'}
                             >
                               Enter your birthday
-                            </Typography>
+                            </Typography> */}
+                            <SecureRenderer
+                              onIgnoreStep={onIgnoreStep}
+                              onSubmitStep={onSubmitStep}
+                            />
                           </Stack>
                         </Grid>
                       </Grid>
@@ -51,7 +62,7 @@ export const SecurityGateway = (props) => {
                           variant="subtitle1"
                           sx={{ textDecoration: 'none' }}
                         >
-                          Don&apos;t have an account?
+                          Next step
                         </Typography>
                       </Grid>
                     </Grid>

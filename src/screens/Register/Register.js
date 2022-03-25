@@ -9,6 +9,7 @@ import validate from 'validate.js'
 import Cookies from 'universal-cookie'
 import { loadProfile } from '../../actions/profileAction'
 import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const schema = {
   email: {
@@ -32,12 +33,14 @@ export const RegisterScreen = (props) => {
   const classes = useStyles()
   const [formData, setFormData] = useState(null)
   const [errors, setErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const dispatch = useDispatch()
 
   const handleChange = (event) => {
     let form = formData || {}
     form[event.target.name] = event.target.value
-    setFormData(form)
+    setFormData({...form})
   }
 
   const signUp = () => {
@@ -45,6 +48,7 @@ export const RegisterScreen = (props) => {
       const error = validate(formData, schema)
 
       if (!error) {
+        setIsSubmitting(true)
         props.signup({
           formData: formData,
           onSuccess: (response) => {
@@ -57,10 +61,13 @@ export const RegisterScreen = (props) => {
             const cookieClient = new Cookies()
             cookieClient.set('token', token, { path: '/', domain: 'localhost' })
 
+            setIsSubmitting(false)
+            toast.success("Success")
             dispatch(loadProfile())
           },
           onError: (error) => {
-
+            setIsSubmitting(false)
+            toast.error(error)
           }
         })
       } else {
@@ -126,6 +133,7 @@ export const RegisterScreen = (props) => {
             <CustomDefaultButton
               style={{ width: '100%' }}
               onClick={signUp}
+              loading={isSubmitting}
             >
               Sign Up
             </CustomDefaultButton>
