@@ -15,6 +15,8 @@
 - Phí mỗi phiên đấu giá là 5% giá trị của sản phẩm
 
 ## BA Ver 2
+- Hệ thống phục vụ 2 mục tiêu là customer và seller
+- Với seller....
 
 ## Tech
 
