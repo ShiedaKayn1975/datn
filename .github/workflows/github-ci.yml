@@ -17,8 +17,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ dev.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ dev.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           
       - name: Deploy to App Runner
@@ -26,7 +26,7 @@ jobs:
         uses: awslabs/amazon-app-runner-deploy@main
         with:
           service: app-runner-git-deploy-service
-          source-connection-arn: ${{ secrets.AWS_CONNECTION_SOURCE_ARN }}
+          source-connection-arn: ${{ dev.AWS_CONNECTION_SOURCE_ARN }}
           repo: https://github.com/${{ github.repository }}
           branch: dev
           runtime: NODEJS_14
