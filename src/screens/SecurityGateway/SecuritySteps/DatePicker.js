@@ -4,12 +4,13 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import moment from 'moment'
+import validate from 'validate.js';
 
 const schema = {
 
 }
 
-export const ConfirmBirthday = (props) => {
+export const DatePicker = (props) => {
   const [value, setValue] = useState(new Date('2000-01-01'))
 
   useEffect(() => {
