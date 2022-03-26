@@ -1,5 +1,7 @@
-import { ConfirmBirthday } from "./ConfirmBirthday";
+import { DatePicker } from "./DatePicker";
+import { InputValue } from "./InputValue";
 
 export {
-  ConfirmBirthday
+  DatePicker,
+  InputValue
 }

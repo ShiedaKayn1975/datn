@@ -1,20 +1,23 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { ConfirmBirthday } from './SecuritySteps'
+import { DatePicker, InputValue } from './SecuritySteps'
 
 const SecureRenderer = (props) => {
   const security = useSelector(state => state.securityGateway)
   const currentStep = security.currentStep
   const steps = security.steps
+  console.log("steps", steps)
 
-  useEffect(() => {
-    toast.success("Hello")
-  }, [])
+  // useEffect(() => {
+  //   toast.success("Hello")
+  // }, [])
 
   return (
     <>
-      <ConfirmBirthday/>
+      <InputValue
+        label={steps?.[currentStep]?.title}
+      />
     </>
   )
 }
