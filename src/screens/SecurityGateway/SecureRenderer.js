@@ -4,20 +4,18 @@ import { toast } from 'react-toastify'
 import { DatePicker, InputValue } from './SecuritySteps'
 
 const SecureRenderer = (props) => {
-  const security = useSelector(state => state.securityGateway)
-  const currentStep = security.currentStep
-  const steps = security.steps
-  console.log("steps", steps)
-
-  // useEffect(() => {
-  //   toast.success("Hello")
-  // }, [])
+  const { step, currentStep, onSetData } = props
 
   return (
     <>
-      <InputValue
-        label={steps?.[currentStep]?.title}
-      />
+      {
+        ['birthday'].includes(step.code) && 
+        <DatePicker
+          code={step.code}
+          title={step.title}
+          onSetData={onSetData}
+        />
+      }
     </>
   )
 }

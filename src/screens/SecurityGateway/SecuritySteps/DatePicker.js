@@ -11,11 +11,12 @@ const schema = {
 }
 
 export const DatePicker = (props) => {
+  const { code, title, onSetData } = props
   const [value, setValue] = useState(new Date('2000-01-01'))
 
   useEffect(() => {
-    console.log(value)
-    console.log(moment(value).format("lll"))
+    // console.log(value)
+    // console.log(moment(value).format("lll"))
   }, [value])
 
   return (
@@ -27,11 +28,9 @@ export const DatePicker = (props) => {
           minDate={new Date('1950-01-01')}
           onChange={(newValue) => {
             setValue(newValue);
+            onSetData('birthday', newValue)
           }}
           renderInput={(params) => <TextField {...params} fullWidth />}
-          sx={{
-
-          }}
         />
       </LocalizationProvider>
     </>
