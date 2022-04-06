@@ -16,7 +16,15 @@
 
 ## BA Ver 2
 - Hệ thống phục vụ 2 mục tiêu là customer và seller
-- Với seller....
+- Với seller, seller có thể tạo sản phẩm, sản phẩm sẽ có
+  + Hình ảnh
+  + Giá khởi điểm
+  + hashtag
+  + Tên sản phẩm
+- Với customer, có thể vào để đấu giá sản phẩm nếu sản phẩm vẫn còn trong phiên đấu giá.
+- Phí mỗi lần trả giá, phí chốt giá
+- Sau khi chốt giá của một customer, cả hai sẽ được đưa vào 1 phòng chat.
+- Trong phòng chat sẽ chốt về dịch vụ ship, phí ship, seller có thể tự đặt ship, ...
 
 ## Tech
 
