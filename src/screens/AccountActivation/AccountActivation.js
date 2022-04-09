@@ -10,6 +10,8 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
+import { DefaultApiErrorHandler } from '../../utils';
+import { toast } from 'react-toastify';
 
 const AccountActivation = (props) => {
   const [valid, setValid] = useState(null)
@@ -26,10 +28,11 @@ const AccountActivation = (props) => {
         }, 3000)
       },
       onError: (error) => {
+        toast.error(DefaultApiErrorHandler(error).message)
         setValid(false)
       }
     })
-  })
+  }, [])
 
   const resendActivationEmail = () => {
     
