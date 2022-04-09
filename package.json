@@ -4,7 +4,7 @@
   "description": "Search app using React",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --open --hot --mode development",
+    "start": "webpack serve --open --hot --mode development --env file=development",
     "build": " GENERATE_SOURCEMAP=false webpack --mode production",
     "build_dev": " GENERATE_SOURCEMAP=false webpack --mode development"
   },
@@ -24,6 +24,7 @@
     "date-fns": "^2.28.0",
     "moment": "^2.29.1",
     "node-sass": "4.14.0",
+    "query-string": "^7.1.1",
     "react": "^16.8.0",
     "react-bootstrap": "^2.2.1",
     "react-dom": "^16.2.0",

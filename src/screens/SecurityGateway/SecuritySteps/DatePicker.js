@@ -1,38 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import moment from 'moment'
-import validate from 'validate.js';
-
-const schema = {
-
-}
 
 export const DatePicker = (props) => {
   const { code, title, onSetData } = props
-  const [value, setValue] = useState(new Date('2000-01-01'))
+  const [value, setValue] = useState("1999-06-06")
 
   useEffect(() => {
-    // console.log(value)
-    // console.log(moment(value).format("lll"))
-  }, [value])
+    onSetData('birthday', "1999-06-06")
+  }, [])
+
+  const handleChange = (event) => {
+    setValue(event.target.value)
+    onSetData('birthday', event.target.value)
+  }
 
   return (
     <>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DesktopDatePicker
-          label={props.title || 'Pick a date'}
-          value={value}
-          minDate={new Date('1950-01-01')}
-          onChange={(newValue) => {
-            setValue(newValue);
-            onSetData('birthday', newValue)
-          }}
-          renderInput={(params) => <TextField {...params} fullWidth />}
-        />
-      </LocalizationProvider>
+      <TextField
+        id="date"
+        label="Birthday"
+        type="date"
+        defaultValue="1999-06-06"
+        fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
+        value={value}
+        onChange={handleChange}
+      />
     </>
   )
 }

@@ -10,6 +10,7 @@ import Cookies from 'universal-cookie'
 import { loadProfile } from '../../actions/profileAction'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
+import { peckPortalClient } from '../../Api'
 
 const schema = {
   email: {
@@ -57,9 +58,8 @@ export const RegisterScreen = (props) => {
             const account = data.account
             const token = data.token
 
-            // save token by cookie
-            const cookieClient = new Cookies()
-            cookieClient.set('token', token, { path: '/', domain: 'localhost' })
+            // save token 
+            peckPortalClient.receiveAuthToken(token)
 
             setIsSubmitting(false)
             toast.success("Success")

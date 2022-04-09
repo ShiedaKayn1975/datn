@@ -52,8 +52,7 @@ export const LoginScreen = (props) => {
           formData: form,
           onSuccess: (response) => {
             let token = response.data.token
-            const cookieClient = new Cookies()
-            cookieClient.set('token', token, { path: '/', domain: 'localhost' })
+            peckPortalClient.receiveAuthToken(token)
 
             setIsSubmitting(false)
             toast.success("Login success")

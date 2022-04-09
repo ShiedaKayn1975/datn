@@ -26,8 +26,9 @@ export const loadProfile = () => dispatch => {
 
 		dispatch({
 			type: 'UPDATE_SECURITY_GATEWAYS',
-			steps: response.data.account_setup_steps,
-			currentStep: response.data.current_step
+			steps: response.data.security_gateways.steps,
+			currentStep: response.data.current_step,
+			code: response.data.security_gateways.code
 		})
 
 		dispatch({
