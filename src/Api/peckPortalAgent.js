@@ -9,7 +9,6 @@ export const peckPortalClient = axios.create({
 })
 
 peckPortalClient.signin = ({ formData, onSuccess, onError }) => {
-  console.log("firm", formData)
   peckPortalClient.post(`/api/v1/signin`, formData, {
     headers: { 'Content-Type': 'application/json' }
   }).then(response => {
@@ -45,5 +44,42 @@ peckPortalClient.hasToken = () => {
 
   return false
 }
+
+peckPortalClient.loadTokenFromCookie = () => {
+  const cookie = new Cookies()
+  let token = cookie.get('token')
+  if(token){
+    peckPortalClient.receiveAuthToken(token, false)
+  }
+}
+
+peckPortalClient.receiveAuthToken = (token, persist = true) => {
+  peckPortalClient.defaults.headers['Authorization'] = 'Bearer ' + token
+
+  if(persist){
+    const cookie = new Cookies()
+    cookie.set('token', token, { path: '/', domain: process.env.APP_DOMAIN })
+  }
+}
+
+peckPortalClient.verifyActivationToken = ({ formData, onSuccess, onError }) => {
+  peckPortalClient.post(`/api/v1/verify_activation_token`, formData, {
+    headers: { 'Content-Type': 'application/json' }
+  }).then(response => {
+    if (onSuccess) {
+      onSuccess(response)
+    }
+  }).catch(error => {
+    if (onError) {
+      onError(error)
+    }
+  })
+}
+
+peckPortalClient.getResourcePath = (type, id, suffix) => {
+  return '/api/v1/' + type + (id ? '/' + id : '') + (suffix ? '/' + suffix : '')
+}
+
+peckPortalClient.loadTokenFromCookie()
 
 export default peckPortalClient

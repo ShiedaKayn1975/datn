@@ -11,6 +11,7 @@ import AppContext from './AppContext'
 import { createBrowserHistory } from 'history'
 import PageNotFound from './screens/404'
 import SecurityGateway from './screens/SecurityGateway'
+import AccountActivation from './screens/AccountActivation'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './themes'
 
@@ -95,6 +96,7 @@ const AppProvider = (props) => {
                       (currentUser?.status == 'validating') ?
                         <Routes>
                           <Route exact path='/security_gateway' element={<SecurityGateway />} />
+                          <Route exact path='/activation' element={<AccountActivation/>} />
                           <Route path="*" element={<Navigate to="/security_gateway" />} />
                         </Routes>
                         :

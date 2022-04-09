@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import SecurityWrapper from '../../components/SecurityWrapper'
+import LayoutWrapper from '../../components/LayoutWrapper'
 import MainCardWrapper from './MainCardWrapper'
 import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import SecureRenderer from './SecureRenderer'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { UserResource } from '../../resources';
+import { toast } from 'react-toastify';
+import { ActionableExceptionHandler } from '../../utils';
 
 export const SecurityGateway = (props) => {
   const theme = useTheme()
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const securitySteps = useSelector(state => state.securityGateway)
+  const currentUser = useSelector(state => state.currentUser)
   const [data, setData] = useState(null)
-  let [currentStep, setCurrentStep] = useState(null)
+  const [finishable, setFinishable] = useState(false)
+  let [currentStepIndex, setCurrentStepIndex] = useState(null)
+
   let [step, setStep] = useState(null)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (securitySteps.hasOwnProperty('currentStep')) {
-      setCurrentStep(securitySteps.currentStep)
+      setCurrentStepIndex(securitySteps.currentStep)
       setStep(securitySteps.steps[securitySteps.currentStep])
     }
   }, [securitySteps])
@@ -28,21 +35,70 @@ export const SecurityGateway = (props) => {
     setData(currentData)
   }
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
-
-  const onIgnoreStep = () => {
-
+  const handleCommitAction = () => {
+    if (data) {
+      UserResource.loader.commitAction({
+        id: currentUser.id,
+        data: {
+          action_code: 'commit_security_gateway',
+          action_data: {
+            security_step: step,
+            security_code: securitySteps.code,
+            data: data
+          }
+        },
+        done: (response) => {
+          if(securitySteps.currentStep == securitySteps.steps.length - 1){
+            setFinishable(true)
+          }else{
+            dispatch({
+              type: 'UPDATE_SECURITY_CURRENT_STEP',
+              currentStep: securitySteps.currentStep + 1,
+            })
+          }
+        },
+        error: (error) => {
+          toast.error(ActionableExceptionHandler(error).message)
+        }
+      })
+    } else {
+      toast.error("Please input data")
+    }
   }
 
-  const onSubmitStep = () => {
-
+  const handleIgnoreAction = () => {
+    if (step.ignorable) {
+      UserResource.loader.commitAction({
+        id: currentUser.id,
+        data: {
+          action_code: 'ignore_security_gateway',
+          action_data: {
+            security_step: step,
+            security_code: securitySteps.code
+          }
+        },
+        done: (response) => {
+          if(securitySteps.currentStep == securitySteps.steps.length - 1){
+            setFinishable(true)
+          }else{
+            dispatch({
+              type: 'UPDATE_SECURITY_CURRENT_STEP',
+              currentStep: securitySteps.currentStep + 1,
+            })
+          }
+        },
+        error: (error) => {
+          toast.error(ActionableExceptionHandler(error).message)
+        }
+      })
+    } else {
+      toast.error("This step is not ignorable!")
+    }
   }
 
   return (
     <>
-      <SecurityWrapper>
+      <LayoutWrapper>
         <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
           <Grid item xs={12}>
             <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: '100vh' }}>
@@ -74,7 +130,7 @@ export const SecurityGateway = (props) => {
                             <Stack alignItems="center" justifyContent="center" spacing={1}>
                               <SecureRenderer
                                 onSetData={onSetData}
-                                currentStep={currentStep}
+                                currentStepIndex={currentStepIndex}
                                 step={step}
                               />
                             </Stack>
@@ -98,6 +154,7 @@ export const SecurityGateway = (props) => {
                                   color: theme.palette.secondary.dark
                                 }
                               }}
+                              onClick={handleIgnoreAction}
                             >
                               Ignore
                             </Typography>
@@ -114,6 +171,7 @@ export const SecurityGateway = (props) => {
                                   color: theme.palette.success.dark
                                 }
                               }}
+                              onClick={handleCommitAction}
                             >
                               Next step
                             </Typography>
@@ -127,7 +185,7 @@ export const SecurityGateway = (props) => {
             </Grid>
           </Grid>
         </Grid>
-      </SecurityWrapper>
+      </LayoutWrapper>
     </>
   )
 } 
