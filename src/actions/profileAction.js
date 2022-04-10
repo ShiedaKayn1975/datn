@@ -24,12 +24,14 @@ export const loadProfile = () => dispatch => {
 			}
 		})
 
-		dispatch({
-			type: 'UPDATE_SECURITY_GATEWAYS',
-			steps: response.data.security_gateways.steps,
-			currentStep: response.data.current_step,
-			code: response.data.security_gateways.code
-		})
+		if(response.data.current_step){
+			dispatch({
+				type: 'UPDATE_SECURITY_GATEWAYS',
+				steps: response.data.security_gateways.steps,
+				currentStep: response.data.current_step,
+				code: response.data.security_gateways.code
+			})
+		}
 
 		dispatch({
 			type: 'LOADING_STATE_UPDATED',

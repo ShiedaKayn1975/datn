@@ -14,6 +14,7 @@ import SecurityGateway from './screens/SecurityGateway'
 import AccountActivation from './screens/AccountActivation'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './themes'
+import MainLayout from './layout/MainLayout'
 
 const loggerStore = store => next => action => {
   console.group(action.type)
@@ -54,7 +55,9 @@ const AppInitialize = (props) => {
   }
 
   if (!peckPortalClient.hasToken()) {
-    return props.children(false, {})
+    return <props.children
+    appReady={false}
+  />
   }
 
   if (loadingState.currentUser == 'failed') {
@@ -74,7 +77,7 @@ const withUser = (Component, extraProps = {}) => {
 const withoutUser = (Component, extraProps = {}) => {
   return function (props) {
     let currentUser = useSelector(state => state.currentUser)
-    return currentUser ? <Navigate to="/" /> : <Component {...props} {...extraProps} />
+    return currentUser ? <Navigate to="/404" /> : <Component {...props} {...extraProps} />
   }
 }
 
@@ -92,21 +95,30 @@ const AppProvider = (props) => {
               {
                 ({ appReady, currentUser, loadingState }) => (
                   <>
+                  {console.log(appReady)}
                     {
-                      (currentUser?.status == 'validating') ?
-                        <Routes>
-                          <Route exact path='/security_gateway' element={<SecurityGateway />} />
-                          <Route exact path='/activation' element={<AccountActivation/>} />
-                          <Route path="*" element={<Navigate to="/security_gateway" />} />
-                        </Routes>
-                        :
-                        <Routes>
-                          <Route exact path='/' element={<SignInWrapper />} />
-                          <Route exact path='/login' element={<SignInWrapper />} />
-                          <Route exact path='/register' element={<SignUpWrapper />} />
-                          <Route path='/404' element={<PageNotFound />} />
-                          <Route path="*" element={<Navigate to="/404" />} />
-                        </Routes>
+                      (currentUser?.status == 'validating' && loadingState.currentUser == 'success') &&
+                      <Routes>
+                        <Route exact path='/security_gateway' element={<SecurityGateway />} />
+                        <Route exact path='/activation' element={<AccountActivation />} />
+                        <Route path="*" element={<Navigate to="/security_gateway" />} />
+                      </Routes>
+                    }
+                    {
+                      appReady == false &&
+                      <Routes>
+                        <Route exact path='/' element={<SignInWrapper />} />
+                        <Route exact path='/login' element={<SignInWrapper />} />
+                        <Route exact path='/register' element={<SignUpWrapper />} />
+                        <Route path='/404' element={<PageNotFound />} />
+                        <Route path="*" element={<Navigate to="/404" />} />
+                      </Routes>
+                    }
+                    {
+                      loadingState?.currentUser == 'success' &&
+                      <Routes>
+                        <Route exact path='/' element={<MainLayout />} />
+                      </Routes>
                     }
                   </>
                 )
