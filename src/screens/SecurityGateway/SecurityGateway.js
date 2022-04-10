@@ -48,9 +48,9 @@ export const SecurityGateway = (props) => {
           }
         },
         done: (response) => {
-          if(securitySteps.currentStep == securitySteps.steps.length - 1){
+          if (securitySteps.currentStep == securitySteps.steps.length - 1) {
             setFinishable(true)
-          }else{
+          } else {
             dispatch({
               type: 'UPDATE_SECURITY_CURRENT_STEP',
               currentStep: securitySteps.currentStep + 1,
@@ -78,9 +78,9 @@ export const SecurityGateway = (props) => {
           }
         },
         done: (response) => {
-          if(securitySteps.currentStep == securitySteps.steps.length - 1){
+          if (securitySteps.currentStep == securitySteps.steps.length - 1) {
             setFinishable(true)
-          }else{
+          } else {
             dispatch({
               type: 'UPDATE_SECURITY_CURRENT_STEP',
               currentStep: securitySteps.currentStep + 1,
@@ -160,21 +160,24 @@ export const SecurityGateway = (props) => {
                             </Typography>
                           </Grid>
                           <Grid item container direction="column" alignItems="end" xs={6}>
-                            <Typography
-                              variant="subtitle1"
-                              sx={{
-                                textDecoration: 'underline',
-                                cursor: 'pointer',
-                                float: 'right',
-                                color: theme.palette.success.main,
-                                '&:hover': {
-                                  color: theme.palette.success.dark
-                                }
-                              }}
-                              onClick={handleCommitAction}
-                            >
-                              Next step
-                            </Typography>
+                            {
+                              step && step.nextable &&
+                              <Typography
+                                variant="subtitle1"
+                                sx={{
+                                  textDecoration: 'underline',
+                                  cursor: 'pointer',
+                                  float: 'right',
+                                  color: theme.palette.success.main,
+                                  '&:hover': {
+                                    color: theme.palette.success.dark
+                                  }
+                                }}
+                                onClick={handleCommitAction}
+                              >
+                                Next step
+                              </Typography>
+                            }
                           </Grid>
                         </Grid>
                       </Grid>

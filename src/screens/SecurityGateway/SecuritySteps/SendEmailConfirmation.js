@@ -24,6 +24,7 @@ const SendEmailConfirmation = (props) => {
   const currentUser = useSelector(state => state.currentUser)
 
   const handleSendEmail = () => {
+    toast.info("We sent an activation email to you, please check your email.")
     UserResource.loader.commitAction({
       id: currentUser.id,
         data: {
