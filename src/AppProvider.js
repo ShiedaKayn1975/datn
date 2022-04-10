@@ -118,6 +118,8 @@ const AppProvider = (props) => {
                       loadingState?.currentUser == 'success' &&
                       <Routes>
                         <Route exact path='/' element={<MainLayout />} />
+                        <Route path='/404' element={<PageNotFound />} />
+                        <Route path="*" element={<Navigate to="/404" />} />
                       </Routes>
                     }
                   </>
