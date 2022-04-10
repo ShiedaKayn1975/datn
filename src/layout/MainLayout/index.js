@@ -9,7 +9,7 @@ import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material'
 import Breadcrumbs from '../../components/extended/Breadcrumbs';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import navigation from '../../menu-items';
+import navigation from '../menu-items';
 
 import { IconChevronRight } from '@tabler/icons';
 

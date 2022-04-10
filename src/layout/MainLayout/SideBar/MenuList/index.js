@@ -2,7 +2,7 @@ import React from 'react'
 import { Typography } from '@mui/material';
 
 import NavGroup from './NavGroup';
-import menuItems from '../../../../menu-items';
+import menuItems from '../../../menu-items';
 
 const MenuList = () => {
     const navItems = menuItems.items.map((item) => {
