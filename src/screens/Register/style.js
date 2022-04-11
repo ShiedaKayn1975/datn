@@ -37,7 +37,7 @@ export const useStyles = makeStyles({
     paddingBottom: 30
   },
   textfieldWrapper: {
-    width: '100%'
+    width: '94%'
   },
   input: {
     width: '100%'

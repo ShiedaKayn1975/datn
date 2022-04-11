@@ -9,7 +9,7 @@ import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material'
 import Breadcrumbs from '../../components/extended/Breadcrumbs';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import navigation from '../../menu-items';
+import navigation from '../menu-items';
 
 import { IconChevronRight } from '@tabler/icons';
 
@@ -23,7 +23,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
       duration: theme.transitions.duration.leavingScreen
     }),
     [theme.breakpoints.up('md')]: {
-      marginLeft: -(240),
+      marginLeft: -240,
       width: `calc(100% - ${260}px)`
     },
     [theme.breakpoints.down('md')]: {

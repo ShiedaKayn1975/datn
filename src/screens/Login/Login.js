@@ -57,6 +57,7 @@ export const LoginScreen = (props) => {
             setIsSubmitting(false)
             toast.success("Login success")
             dispatch(loadProfile())
+            window.location.href = '/'
           },
           onError: (error) => {
             setIsSubmitting(false)

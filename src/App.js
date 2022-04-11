@@ -1,6 +1,5 @@
 import React from 'react'
 import './index.css'
-import './App.scss'
 import AppProvider from './AppProvider'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
