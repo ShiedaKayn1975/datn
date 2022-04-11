@@ -23,7 +23,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
       duration: theme.transitions.duration.leavingScreen
     }),
     [theme.breakpoints.up('md')]: {
-      marginLeft: -(240),
+      marginLeft: -240,
       width: `calc(100% - ${260}px)`
     },
     [theme.breakpoints.down('md')]: {
