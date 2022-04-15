@@ -42,7 +42,6 @@ const cookie = new Cookies()
 const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.menuState);
-  const navigate = useNavigate();
 
   const [sdm, setSdm] = useState(true);
   const [value, setValue] = useState('');
@@ -50,6 +49,7 @@ const ProfileSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
   const context = useContext(AppContext)
+  const navigate = useNavigate()
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
@@ -185,40 +185,12 @@ const ProfileSection = () => {
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 0}
-                          onClick={(event) => handleListItemClick(event, 0, '/user/account-profile/profile1')}
+                          onClick={(event) => handleListItemClick(event, 0, '/account')}
                         >
                           <ListItemIcon>
                             <IconSettings stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
-                        </ListItemButton>
-                        <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 1}
-                          onClick={(event) => handleListItemClick(event, 1, '/user/social-profile/posts')}
-                        >
-                          <ListItemIcon>
-                            <IconUser stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Grid container spacing={1} justifyContent="space-between">
-                                <Grid item>
-                                  <Typography variant="body2">Social Profile</Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Chip
-                                    label="02"
-                                    size="small"
-                                    sx={{
-                                      bgcolor: theme.palette.warning.dark,
-                                      color: theme.palette.background.default
-                                    }}
-                                  />
-                                </Grid>
-                              </Grid>
-                            }
-                          />
+                          <ListItemText primary={<Typography variant="body2">Your profile</Typography>}/>
                         </ListItemButton>
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}

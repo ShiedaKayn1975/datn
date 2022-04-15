@@ -3,7 +3,7 @@ import utilities from './utilities';
 import other from './other';
 
 const menuItems = {
-    items: [dashboard, utilities, other]
+    items: [dashboard, utilities]
 };
 
 export default menuItems;

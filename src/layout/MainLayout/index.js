@@ -12,6 +12,7 @@ import Sidebar from './Sidebar';
 import navigation from '../menu-items';
 
 import { IconChevronRight } from '@tabler/icons';
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
   ...theme.typography.mainContent,
