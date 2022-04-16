@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { MainCard } from '../../../components/Card'
 import { Grid, TextField, Button } from '@mui/material'
 import validate from 'validate.js'
+import { peckPortalClient } from '../../../api'
 
 const schema = {
   current_password: {
@@ -20,7 +21,7 @@ const schema = {
   },
   confirm_new_password: {
     presence: true,
-    equality: "password"
+    equality: "new_password"
   }
 }
 
@@ -39,7 +40,15 @@ const ChangePassword = (props) => {
     if(errors){
       setFormError(errors)
     }else{
-
+      peckPortalClient.changePassword({
+        formData: form,
+        onSuccess: (response) => {
+          console.log(response)
+        },
+        onError: (error) => {
+          
+        }
+      })
     }
   }
 
