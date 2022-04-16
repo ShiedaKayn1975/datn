@@ -8,6 +8,20 @@ export const peckPortalClient = axios.create({
   headers: { 'Content-Type': 'application/vnd.api+json' }
 })
 
+peckPortalClient.changePassword = ({ formData, onSuccess, onError}) => {
+  peckPortalClient.post(`/api/v1/change_password`, formData, {
+    headers: { 'Content-Type': 'application/json' }
+  }).then(response => {
+    if (onSuccess) {
+      onSuccess(response)
+    }
+  }).catch(error => {
+    if (onError) {
+      onError(error)
+    }
+  })
+}
+
 peckPortalClient.signin = ({ formData, onSuccess, onError }) => {
   peckPortalClient.post(`/api/v1/signin`, formData, {
     headers: { 'Content-Type': 'application/json' }

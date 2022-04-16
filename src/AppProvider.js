@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Redirect, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginScreen from './screens/Login'
 import RegisterScreen from './screens/Register'
 import { Provider } from 'react-redux'
@@ -15,6 +15,14 @@ import AccountActivation from './screens/AccountActivation'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './themes'
 import MainLayout from './layout/MainLayout'
+import Account from './screens/Account/account'
+
+const components = [
+  {
+    path: 'account',
+    component: Account
+  }
+]
 
 const loggerStore = store => next => action => {
   console.group(action.type)
@@ -117,7 +125,13 @@ const AppProvider = (props) => {
                     {
                       loadingState?.currentUser == 'success' &&
                       <Routes>
-                        <Route exact path='/' element={<MainLayout />} />
+                        <Route path='/' element={<MainLayout />} >
+                          {
+                            components.map((component, index) => {
+                              return <Route key={index} path={component.path} element={<component.component />} />
+                            })
+                          }
+                        </Route>
                         <Route path='/404' element={<PageNotFound />} />
                         <Route path="*" element={<Navigate to="/404" />} />
                       </Routes>

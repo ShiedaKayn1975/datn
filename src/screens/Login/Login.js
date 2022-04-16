@@ -39,7 +39,7 @@ export const LoginScreen = (props) => {
   const handleChange = (event) => {
     let formData = form || {}
     formData[event.target.name] = event.target.value
-    setForm({...formData})
+    setForm({ ...formData })
   }
 
   const signIn = () => {
@@ -64,7 +64,7 @@ export const LoginScreen = (props) => {
             toast.error(error)
           }
         })
-      }else{
+      } else {
         setErrors(error)
       }
     }
@@ -91,7 +91,7 @@ export const LoginScreen = (props) => {
                 autoFocus
                 value={form?.email || ''}
                 error={errors['email']}
-                erroricon={<ReportGmailerrorredIcon/>}
+                erroricon={<ReportGmailerrorredIcon />}
               />
             </div>
 
@@ -107,7 +107,12 @@ export const LoginScreen = (props) => {
                 className={classes.input}
                 onChange={handleChange}
                 error={errors['password']}
-                erroricon={<ReportGmailerrorredIcon/>}
+                erroricon={<ReportGmailerrorredIcon />}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    signIn()
+                  }
+                }}
               />
             </div>
           </div>
