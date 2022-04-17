@@ -5,6 +5,7 @@ export const initialState = {
 };
 
 const menuState = (state = initialState, action) => {
+  let id
   switch (action.type) {
     case 'MENU_OPEN':
       id = action.id;
@@ -23,3 +24,4 @@ const menuState = (state = initialState, action) => {
 };
 
 export default menuState;
+

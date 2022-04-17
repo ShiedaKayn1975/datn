@@ -72,7 +72,7 @@ peckPortalClient.receiveAuthToken = (token, persist = true) => {
 
   if(persist){
     const cookie = new Cookies()
-    cookie.set('token', token, { path: '/', domain: process.env.APP_DOMAIN })
+    cookie.set('token', token, { path: '/', domain: config.appDomain })
   }
 }
 

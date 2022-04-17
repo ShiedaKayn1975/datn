@@ -4,9 +4,9 @@
   "description": "Search app using React",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --open --hot --mode development --env file=development",
+    "start": "webpack serve --open --hot --mode development --env file=local",
     "build": " GENERATE_SOURCEMAP=false webpack --mode production",
-    "build_dev": " GENERATE_SOURCEMAP=false webpack --mode development"
+    "build-dev": " GENERATE_SOURCEMAP=false webpack --mode production --env file=development"
   },
   "keywords": [],
   "author": "",

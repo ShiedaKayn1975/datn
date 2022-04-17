@@ -3,6 +3,12 @@ import { MainCard } from '../../../components/Card'
 import { Grid, TextField, Button } from '@mui/material'
 import validate from 'validate.js'
 import { peckPortalClient } from '../../../api'
+import { toast } from 'react-toastify'
+import { DefaultApiErrorHandler } from '../../../utils'
+import config from 'config'
+import Cookies from 'universal-cookie'
+
+const cookie = new Cookies()
 
 const schema = {
   current_password: {
@@ -28,6 +34,7 @@ const schema = {
 const ChangePassword = (props) => {
   const [ form, setForm ] = useState({})
   const [ formError, setFormError ] = useState({})
+  const [ submitted, setSubmitted ] = useState(false)
 
   const handleChange = (event) => {
     const formData = Object.assign({}, form)
@@ -43,10 +50,17 @@ const ChangePassword = (props) => {
       peckPortalClient.changePassword({
         formData: form,
         onSuccess: (response) => {
-          console.log(response)
+          setSubmitted(true)
+          toast.success("Change password successful")
+          toast.info("Logout after 3 seconds")
+
+          setTimeout(() => {
+            cookie.remove('token', { path: '/', domain: config.appDomain })
+            window.location.href = '/'
+          }, 3000) 
         },
         onError: (error) => {
-          
+          toast.error(DefaultApiErrorHandler(error).message)
         }
       })
     }
@@ -135,6 +149,7 @@ const ChangePassword = (props) => {
               <Button variant='contained'
                 sx={{ marginRight: 2 }}
                 onClick={handleChangePassword}
+                disabled={submitted}
               >Change password</Button>
               <Button 
                 onClick={clear}
