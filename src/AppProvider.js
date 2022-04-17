@@ -16,11 +16,21 @@ import { ThemeProvider } from '@mui/material/styles'
 import theme from './themes'
 import MainLayout from './layout/MainLayout'
 import Account from './screens/Account/account'
+import { Product } from './screens/Product'
+import { Order } from './screens/Order'
 
 const components = [
   {
     path: 'account',
     component: Account
+  },
+  {
+    path: 'products',
+    component: Product
+  },
+  {
+    path: 'orders',
+    component: Order
   }
 ]
 
@@ -132,7 +142,7 @@ const AppProvider = (props) => {
                             })
                           }
                         </Route>
-                        <Route path='/404' element={<PageNotFound />} />
+                        <Route exact path='/404' element={<PageNotFound />} />
                         <Route path="*" element={<Navigate to="/404" />} />
                       </Routes>
                     }

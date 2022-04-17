@@ -28,19 +28,21 @@ const NavItem = ({ item, level }) => {
   );
 
   let itemTarget = '_self';
+
   if (item.target) {
     itemTarget = '_blank';
   }
 
   let listItemProps = {
-    component: forwardRef((props, ref) => <Link ref={ref} {...props} to={`/${item.url}`} target={itemTarget} />)
+    component: forwardRef((props, ref) => <Link ref={ref} {...props} to={`${item.url}`} target={itemTarget} />)
   };
+
   if (item?.external) {
     listItemProps = { component: 'a', href: item.url, target: itemTarget };
   }
 
   const itemHandler = (id) => {
-    dispatch({ type: 'MENU_OPEN', id });
+    dispatch({ type: 'MENU_OPEN', id: id });
     if (matchesSM) dispatch({ type: 'SET_MENU', opened: false });
   };
 

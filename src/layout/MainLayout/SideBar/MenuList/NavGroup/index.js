@@ -9,7 +9,6 @@ import NavCollapse from '../NavCollapse';
 
 const NavGroup = ({ item }) => {
     const theme = useTheme();
-
     const items = item.children?.map((menu) => {
         switch (menu.type) {
             case 'collapse':

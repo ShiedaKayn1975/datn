@@ -100,7 +100,8 @@ module.exports = (env, argv) => {
     externals: {
       // global app config object
       config: JSON.stringify({
-        peckPortalApi: process.env.PECK_PORTAL_API_URL
+        peckPortalApi: process.env.PECK_PORTAL_API_URL,
+        appDomain: process.env.APP_DOMAIN
       })
     },
   }

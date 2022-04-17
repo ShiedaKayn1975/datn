@@ -32,7 +32,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { MainCard } from '../../../../components/Card';
 import Transitions from '../../../../components/extended/Transitions';
-import User1 from '../../../../assets/images/users/user-round.svg';
+import User1 from '../../../../assets/images/users/jinx.jpeg';
 
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 import Cookies from 'universal-cookie';

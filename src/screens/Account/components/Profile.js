@@ -3,7 +3,7 @@ import { MainCard } from '../../../components/Card'
 import { Grid } from '@mui/material'
 import { Typography, Avatar, List, ListItem, ListItemIcon, ListItemText, ListItemButton } from '@mui/material'
 import AppContext from '../../../AppContext'
-import UserAvatar from '../../../assets/images/users/user-round.svg'
+import UserAvatar from '../../../assets/images/users/jinx.jpeg'
 import { IconEdit, IconMail, IconPhone, IconLocation } from '@tabler/icons'
 import styled from '@mui/material/styles'
 
