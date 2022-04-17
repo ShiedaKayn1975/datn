@@ -11,6 +11,8 @@ import NotificationSection from './NotificationSection';
 
 import { IconMenu2 } from '@tabler/icons';
 
+import AccountBalance from './AccountBalance';
+
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
 
@@ -56,6 +58,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}
+      <AccountBalance/>
       <NotificationSection />
       <ProfileSection />
     </>
