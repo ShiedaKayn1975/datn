@@ -3,11 +3,13 @@ import { IconCoin, IconPlus } from '@tabler/icons'
 import {
   Box, ButtonBase, Avatar, Popper, Paper, ClickAwayListener,
   Grid, Stack, useMediaQuery, Typography, Divider, List, ListItemButton,
-  ListItemIcon, ListItemText
+  ListItemIcon, ListItemText, Button
 } from '@mui/material'
 import { useTheme } from '@mui/material'
 import Transitions from '../../../../components/extended/Transitions'
 import { MainCard } from '../../../../components/Card'
+import { FormModal } from '../../../../components/Modal'
+import { FileUploader } from '../../../../components/FileUploader'
 
 var formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -41,8 +43,24 @@ const AccountBalance = (props) => {
     prevOpen.current = open;
   }, [open]);
 
+  const onAddMoney = () => {
+    FormModal.show({
+      title: "Add money",
+      renderComponent: () => {
+        return (
+          <>
+            <FileUploader 
+              preview={true}
+            />
+          </>
+        )
+      }
+    })
+  }
+
   return (
     <>
+      <FormModal />
       <Box
         sx={{
           ml: 2,
@@ -113,7 +131,7 @@ const AccountBalance = (props) => {
                       <Grid container alignItems="center" justifyContent="space-between" sx={{ pt: 2, px: 2 }} spacing={3}>
                         <Grid item>
                           <Stack direction="row" spacing={2}>
-                            <Typography variant="subtitle1">Current account balance</Typography>
+                            <Typography variant="subtitle1">Account balance</Typography>
                           </Stack>
                         </Grid>
                         <Grid item>
@@ -126,18 +144,10 @@ const AccountBalance = (props) => {
                     <Divider />
                     <Grid item xs={12}>
                       <Stack direction="row" spacing={2}>
-                        <List
-                          sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                        >
-                          <ListItemButton divider
-                            sx={{ padding: '14px 16px' }}
-                          >
-                            <ListItemIcon>
-                              <IconPlus />
-                            </ListItemIcon>
-                            <ListItemText id="text-1" primary="Add money" />
-                          </ListItemButton>
-                        </List>
+                        <Button variant='contained' fullWidth
+                          sx={{ margin: 2 }}
+                          onClick={onAddMoney}
+                        >Add money</Button>
                       </Stack>
                     </Grid>
                   </Grid>
