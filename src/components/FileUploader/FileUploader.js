@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone'
 import { CssConstant } from '../../assets/constant/constant'
 import { makeStyles } from '@mui/styles'
 import { Divider, useTheme } from '@mui/material'
+import { cupCakeClient } from '../../services'
 
 const thumbsContainer = {
   display: 'flex',
@@ -65,10 +66,19 @@ const FileUploader = (props) => {
   const [files, setFiles] = useState([])
 
   const onDrop = (acceptedFiles, rejectedFiles, event) => {
-    // console.log(acceptedFiles)
-    // console.log(rejectedFiles)
-    // console.log(event)
     setFiles([...files.concat(acceptedFiles.map(item => URL.createObjectURL(item)))])
+    acceptedFiles.forEach(file => {
+      cupCakeClient.uploadFile({
+        file: file,
+        params: {public: true},
+        done: (response) => {
+
+        },
+        error: (error) => {
+          
+        }
+      })
+    })
   }
 
   return (

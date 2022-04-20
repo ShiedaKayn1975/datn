@@ -1,13 +1,15 @@
 import React from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Divider,
-  Typography
+  Typography, ClickAwayListener
 } from '@mui/material'
 
 const instance = {}
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="right" ref={ref} {...props} />;
-})
+const Transition = (direction = 'right') => {
+  return React.forwardRef(function Transition(props, ref) {
+    return <Slide direction={direction} ref={ref} {...props} />;
+  })
+}
 
 export default class FormModal extends React.Component {
   constructor(props) {
@@ -28,20 +30,26 @@ export default class FormModal extends React.Component {
   }
 
   handleClose = () => {
-    this.setState({ open: false })
+    this.setState({ open: false, config: {} })
   }
 
   render() {
     const { open, config, loading } = this.state
+
     return (
-      <>
+      <div>
         <Dialog
           open={open}
-          TransitionComponent={Transition}
+          TransitionComponent={Transition(config.direction)}
           keepMounted
           onClose={this.handleClose}
           aria-describedby="alert-dialog"
           aria-labelledby="alert-dialog-title"
+          sx={{
+            zIndex: open ? 2000 : -1,
+          }}
+          maxWidth='sm'
+          fullWidth
         >
           {
             config.title &&
@@ -67,7 +75,7 @@ export default class FormModal extends React.Component {
             <Button onClick={this.handleClose} sx={{marginRight: 2}} >Cancel</Button>
           </DialogActions>
         </Dialog>
-      </>
+      </div>
     )
   }
 }
