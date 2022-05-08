@@ -30,7 +30,7 @@ const SecureRenderer = (props) => {
           name={step.code}
           fullWidth={true}
           placeholder={step.title}
-          value={value}
+          value={value || ''}
           onChange={handleChangeInput}
         />
       }

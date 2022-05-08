@@ -5,6 +5,10 @@ require('dotenv').config()
 var webpack = require('webpack');
 
 module.exports = (env, argv) => {
+  require('dotenv').config({
+    path: `./.env${env.file ? '.' + env.file : ''}`
+  })
+  
   return {
     mode: 'development',
     resolve: {
@@ -101,6 +105,7 @@ module.exports = (env, argv) => {
       // global app config object
       config: JSON.stringify({
         peckPortalApi: process.env.PECK_PORTAL_API_URL,
+        cupCakeHost: process.env.CUP_CAKE_HOST_API_URL,
         appDomain: process.env.APP_DOMAIN
       })
     },

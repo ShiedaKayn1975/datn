@@ -4,14 +4,49 @@ export default class AxiosClient {
   constructor(props){
     this.client = props.client
     this.resourceName = props.resourceName
-
+    this.defaultParams = props.defaultParams || {}
+    this.relatives = props.relatives || {}
     this.jsonApiClient = new JsonApiClient({
       client: this.client
     })
   }
 
-  fetchItems = ({}) => {
-    
+  fetchItems = ({filters, paging, sorts, options, download, params, done, error, dataParser}) => {
+    params = Object.assign({}, params, this.defaultParams)
+    let relatives = this.relatives
+    this.jsonApiClient.loadResources(this.resourceName, {
+      filters, paging, options, download, sorts, params, done, error, relatives, dataParser
+    })
+  }
+
+  fetchItem = ({ id, done, error, params}) => {
+    params = Object.assign({}, params, this.defaultParams)
+    let relatives = this.relatives
+    this.jsonApiClient.loadResource(this.resourceName, id, {
+      params, done, error, relatives
+    })
+  }
+
+  createItem = ({ data, params, done, error }) => {
+    params = Object.assign({}, params, this.defaultParams)
+    let relatives = this.relatives
+    this.jsonApiClient.createResource(this.resourceName, data, {
+      params, done, error, relatives
+    })
+  }
+
+  updateItem = ({ id, data, params, done, error }) => {
+    params = Object.assign({}, params, this.defaultParams)
+    let relatives = this.relatives
+    this.jsonApiClient.updateResource(this.resourceName, id, data, {
+      params, done, error, relatives
+    })
+  }
+
+  deleteItem = ({ id, params, done, error }) => {
+    this.jsonApiClient.deleteResource(this.resourceName, id, {
+      done, error
+    })
   }
 
   /*

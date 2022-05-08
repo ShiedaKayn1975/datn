@@ -5,5 +5,8 @@ export const CssConstant = {
   errorText: {
     color: 'red',
     fontSize: 13
-  }
+  },
+  dropzone: {
+    margin: '10px 0',
+    border: '4px dashed #ccc',  }
 }

@@ -117,8 +117,9 @@ const AppProvider = (props) => {
                     {
                       (currentUser?.status == 'validating' && loadingState.currentUser == 'success') &&
                       <Routes>
-                        <Route exact path='/security_gateway' element={<SecurityGateway />} />
-                        <Route exact path='/activation' element={<AccountActivation />} />
+                        <Route path='/' element={<SecurityGateway />} />
+                        <Route path='/security_gateway' element={<SecurityGateway />} />
+                        <Route path='/activation' element={<AccountActivation />} />
                         <Route path="*" element={<Navigate to="/security_gateway" />} />
                       </Routes>
                     }
@@ -133,7 +134,7 @@ const AppProvider = (props) => {
                       </Routes>
                     }
                     {
-                      loadingState?.currentUser == 'success' &&
+                      (currentUser?.status == 'active' && loadingState?.currentUser == 'success') &&
                       <Routes>
                         <Route path='/' element={<MainLayout />} >
                           {
@@ -142,7 +143,7 @@ const AppProvider = (props) => {
                             })
                           }
                         </Route>
-                        <Route exact path='/404' element={<PageNotFound />} />
+                        <Route path='/404' element={<PageNotFound />} />
                         <Route path="*" element={<Navigate to="/404" />} />
                       </Routes>
                     }
