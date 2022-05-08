@@ -7,6 +7,22 @@ import { MainCard } from '../../components/Card'
 import { IconCaretDown } from '@tabler/icons'
 import FormModal from '../../components/Modal/FormModal'
 import ProductForm from './ProductForm'
+import ProductResource from '../../resources/Product'
+
+const schema = {
+  name: {
+    presence: { allowEmpty: false, message: '^Required' },
+  },
+  tags: {
+    presence: { allowEmpty: false, message: '^Required' },
+  },
+  quality_commitment: {
+    presence: { allowEmpty: false, message: '^Required' },
+  },
+  price: {
+    presence: { allowEmpty: false, message: '^Required' },
+  },
+}
 
 const Product = (props) => {
   const theme = useTheme()
@@ -14,8 +30,27 @@ const Product = (props) => {
   const newProduct = () => {
     FormModal.show({
       title: 'New product',
-      direction: 'down',
-      renderComponent: () => <ProductForm/>
+      submitData: {},
+      width: '60vw',
+      schema: schema,
+      renderComponent: ({submitData, handleChange}) => <ProductForm
+        submitData={submitData}
+        handleChange={handleChange}
+      />,
+      action: {
+        title: "Create",
+        onSubmit: (submitData, handleChange, ctx) => {
+          ProductResource.loader.createItem({
+            data: submitData.values,
+            done: (response) => {
+              console.log(response)
+            },
+            error: (error) => {
+
+            }
+          })
+        }
+      }
     })
   }
 

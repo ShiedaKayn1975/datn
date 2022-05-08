@@ -1,15 +1,13 @@
 import React from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Divider,
+import {
+  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Divider,
   Typography, ClickAwayListener
 } from '@mui/material'
+import validate from 'validate.js'
+import { toast } from 'react-toastify'
+import CircularProgress from '@mui/material/CircularProgress';
 
 const instance = {}
-
-const Transition = (direction = 'right') => {
-  return React.forwardRef(function Transition(props, ref) {
-    return <Slide direction={direction} ref={ref} {...props} />;
-  })
-}
 
 export default class FormModal extends React.Component {
   constructor(props) {
@@ -17,7 +15,13 @@ export default class FormModal extends React.Component {
     this.state = {
       open: false,
       config: {},
-      loading: false
+      submitData: {
+        isValid: true,
+        values: {},
+        errors: {},
+        isSubmiting: false,
+      },
+      submitting: false
     }
   }
 
@@ -26,21 +30,55 @@ export default class FormModal extends React.Component {
   }
 
   show(config) {
-    this.setState({ open: true, config })
+    const submitData = Object.assign({}, this.state.submitData)
+    if (config.submitData) {
+      submitData['values'] = config.submitData,
+        submitData['errors'] = {}
+      submitData['isSubmiting'] = false
+      submitData['isValid'] = true
+    }
+    this.setState({ open: true, config, submitData })
+  }
+
+  handleChange = (name, value) => {
+    const submitData = Object.assign({}, this.state.submitData);
+    submitData['values'][name] = value
+    this.setState({ submitData })
   }
 
   handleClose = () => {
-    this.setState({ open: false, config: {} })
+    this.setState({ open: false, config: {}, submitting: false })
+  }
+
+  handleSubmit = () => {
+    const config = this.state.config
+    const submitData = this.state.submitData
+    if (config.schema) {
+      const errors = validate(this.state.submitData.values, config.schema)
+      if (errors) {
+        submitData.errors = errors
+        this.setState({ submitData })
+      }
+    }
+
+    if (this.state.submitData.errors && Object.keys(this.state.submitData.errors).length > 0) {
+      toast.error("Submit error, please check FormModal.js")
+    } else {
+      this.setState({ submitting: true })
+      if(config.action.onSubmit){
+        config.action.onSubmit(submitData, this.handleChange, this)
+      }
+    }
   }
 
   render() {
-    const { open, config, loading } = this.state
+    const { open, config, submitData, submitting } = this.state
 
     return (
       <div>
         <Dialog
           open={open}
-          TransitionComponent={Transition(config.direction)}
+          // TransitionComponent={Transition(config.direction)}
           keepMounted
           onClose={this.handleClose}
           aria-describedby="alert-dialog"
@@ -66,13 +104,26 @@ export default class FormModal extends React.Component {
           <DialogContent>
             {
               config.renderComponent &&
-              config.renderComponent()
+              config.renderComponent({
+                submitData: submitData,
+                handleChange: this.handleChange
+              })
             }
           </DialogContent>
           <Divider />
           <DialogActions>
-            <Button onClick={this.handleClose} variant='contained'>Submit</Button>
-            <Button onClick={this.handleClose} sx={{marginRight: 2}} >Cancel</Button>
+            {
+              config.action &&
+              <Button onClick={this.handleSubmit} variant='contained'>
+                {
+                  submitting ?
+                    <CircularProgress size={22} color='success' />
+                    :
+                    <>{config.action?.title || 'Submit'}</>
+                }
+              </Button>
+            }
+            <Button onClick={this.handleClose} sx={{ marginRight: 2 }} >Cancel</Button>
           </DialogActions>
         </Dialog>
       </div>
