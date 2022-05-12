@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PaperItem from '../../components/Paper/PaperItem'
-import { Grid, Typography, Breadcrumbs, Link, Stack, Button } from '@mui/material'
+import { Grid, Typography, Breadcrumbs, Link, Stack, Button, ImageListItem, ImageListItemBar, IconButton } from '@mui/material'
 import { useTheme } from '@mui/material'
 import { IconHome } from '@tabler/icons'
 import { MainCard } from '../../components/Card'
@@ -8,12 +8,16 @@ import { IconCaretDown } from '@tabler/icons'
 import FormModal from '../../components/Modal/FormModal'
 import ProductForm from './ProductForm'
 import ProductResource from '../../resources/Product'
+import { toast } from 'react-toastify'
+import UserResource from '../../resources/User'
+import InfoIcon from '@mui/icons-material/Info';
+import moment from 'moment'
 
 const schema = {
   name: {
     presence: { allowEmpty: false, message: '^Required' },
   },
-  tags: {
+  categories: {
     presence: { allowEmpty: false, message: '^Required' },
   },
   quality_commitment: {
@@ -26,28 +30,60 @@ const schema = {
 
 const Product = (props) => {
   const theme = useTheme()
+  const [products, setProducts] = useState(null)
+  const XS_GRID = 3
+
+  useEffect(() => {
+    loadItems()
+  }, [])
+
+  const loadItems = (params = {}) => {
+    ProductResource.loader.fetchItems({
+      paging: { perPage: 20, page: 1 },
+      relatives: {
+        creator: {
+          loader: UserResource.loader,
+          resource: 'users',
+          foreignKey: 'creator_id',
+          params: {
+            'fields[users]': 'id,email'
+          }
+        }
+      },
+      done: (response) => {
+        setProducts(response)
+      },
+      error: (error) => {
+        toast.error("Fetch products error")
+      }
+    })
+  }
 
   const newProduct = () => {
     FormModal.show({
       title: 'New product',
       submitData: {},
-      width: '60vw',
       schema: schema,
-      renderComponent: ({submitData, handleChange}) => <ProductForm
+      renderComponent: ({ submitData, handleChange }) => <ProductForm
         submitData={submitData}
         handleChange={handleChange}
       />,
       action: {
         title: "Create",
         onSubmit: (submitData, handleChange, ctx) => {
-          ProductResource.loader.createItem({
-            data: submitData.values,
-            done: (response) => {
-              console.log(response)
-            },
-            error: (error) => {
-
-            }
+          console.log(submitData)
+          return new Promise((resolve, reject) => {
+            const data = submitData.values
+            ProductResource.loader.createItem({
+              data: data,
+              done: (response) => {
+                loadItems()
+                resolve(response)
+              },
+              error: (error) => {
+                reject(error)
+              }
+            })
           })
         }
       }
@@ -56,7 +92,7 @@ const Product = (props) => {
 
   return (
     <>
-      <FormModal/>
+      <FormModal />
       <PaperItem
         {...theme.typography.body2}
         color={theme.palette.text.secondary}
@@ -86,7 +122,7 @@ const Product = (props) => {
               }}
             >
               <Button variant='outlined' endIcon={<IconCaretDown fill={theme.palette.primary.main} />} >More actions</Button>
-              <Button variant='contained' 
+              <Button variant='contained'
                 onClick={newProduct}
               >New product</Button>
             </Stack>
@@ -100,7 +136,39 @@ const Product = (props) => {
           minHeight: '40vh'
         }}
       >
-
+        <Grid container spacing={2}>
+          {
+            products?.map((product, index) => {
+              return (
+                <Grid item xs={XS_GRID} key={index}>
+                  <PaperItem key={index}>
+                    <ImageListItem key={index}
+                      style={{height: 180, width: 270, cursor: 'pointer'}}
+                    >
+                      <img
+                        src={`${product.images?.[0] || "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.hhireb.com%2Ffalls-featured-attraction-the-art-cafe%2F&psig=AOvVaw0tp_GGwEnY3rA-4J45aWTE&ust=1652433602334000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCKiZhYHR2fcCFQAAAAAdAAAAABAI"}`}
+                        loading="lazy"
+                      />
+                      <ImageListItemBar
+                        key={index}
+                        title={product.name}
+                        subtitle={moment(product.created_at).format('lll')}
+                        actionIcon={
+                          <IconButton
+                            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                            aria-label={`info about ${product.name}`}
+                          >
+                            <InfoIcon />
+                          </IconButton>
+                        }
+                      />
+                    </ImageListItem>
+                  </PaperItem>
+                </Grid>
+              )
+            })
+          }
+        </Grid>
       </MainCard>
     </>
   )

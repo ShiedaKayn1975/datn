@@ -8,5 +8,5 @@ export const CssConstant = {
   },
   dropzone: {
     margin: '10px 0',
-    border: '4px dashed #ccc',  }
+    border: '2px dashed #ccc',  }
 }
