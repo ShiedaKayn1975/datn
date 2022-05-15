@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import PaperItem from '../../components/Paper/PaperItem'
-import { Grid, Typography, Breadcrumbs, Rating, Stack, Button, ImageListItem, ImageListItemBar, IconButton } from '@mui/material'
+import {
+  Grid, Typography, Stack, Button, ImageListItem, ImageListItemBar, IconButton,
+  Pagination
+} from '@mui/material'
 import { useTheme } from '@mui/material'
-import { IconHome } from '@tabler/icons'
 import { MainCard } from '../../components/Card'
-import { IconCaretDown } from '@tabler/icons'
 import FormModal from '../../components/Modal/FormModal'
 import ProductForm from './ProductForm'
 import ProductResource from '../../resources/Product'
 import { toast } from 'react-toastify'
 import UserResource from '../../resources/User'
-import InfoIcon from '@mui/icons-material/Info';
 import moment from 'moment'
 import { useNavigate } from "react-router-dom";
 
@@ -32,16 +32,18 @@ const schema = {
 const Product = (props) => {
   const theme = useTheme()
   const [products, setProducts] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageCount, setPageCount] = useState(0)
   const XS_GRID = 3
   const navigate = useNavigate()
 
   useEffect(() => {
     loadItems()
-  }, [])
+  }, [currentPage])
 
   const loadItems = (params = {}) => {
     ProductResource.loader.fetchItems({
-      paging: { perPage: 20, page: 1 },
+      paging: { perPage: 20, page: currentPage },
       relatives: {
         creator: {
           loader: UserResource.loader,
@@ -52,13 +54,18 @@ const Product = (props) => {
           }
         }
       },
-      done: (response) => {
+      done: (response, meta) => {
         setProducts(response)
+        setPageCount(meta['Page Count'])
       },
       error: (error) => {
         toast.error("Fetch products error")
       }
     })
+  }
+
+  const handleChangePage = (event, page) => {
+    setCurrentPage(page)
   }
 
   const newProduct = () => {
@@ -73,7 +80,6 @@ const Product = (props) => {
       action: {
         title: "Create",
         onSubmit: (submitData, handleChange, ctx) => {
-          console.log(submitData)
           return new Promise((resolve, reject) => {
             const data = submitData.values
 
@@ -144,7 +150,8 @@ const Product = (props) => {
         sx={{
           borderRadius: 3,
           marginTop: 3,
-          minHeight: '40vh'
+          minHeight: '40vh',
+          position: 'relative'
         }}
       >
         <Grid container spacing={2}>
@@ -154,7 +161,7 @@ const Product = (props) => {
                 <Grid item xs={XS_GRID} key={index}>
                   <PaperItem key={index}>
                     <ImageListItem key={index}
-                      style={{height: 180, width: 270, cursor: 'pointer'}}
+                      style={{ height: 180, width: 270, cursor: 'pointer' }}
                       onClick={() => {
                         navigate(`/products/${product.id}`)
                       }}
@@ -167,13 +174,13 @@ const Product = (props) => {
                         key={index}
                         title={product.name}
                         subtitle={moment(product.created_at).format('lll')}
-                        // actionIcon={
-                        //   <IconButton
-                        //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                        //     aria-label={`info about ${product.name}`}
-                        //   >
-                        //   </IconButton>
-                        // }
+                      // actionIcon={
+                      //   <IconButton
+                      //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                      //     aria-label={`info about ${product.name}`}
+                      //   >
+                      //   </IconButton>
+                      // }
                       />
                     </ImageListItem>
                   </PaperItem>
@@ -181,6 +188,17 @@ const Product = (props) => {
               )
             })
           }
+          <Grid item xs={12}>
+            {
+              pageCount &&
+              <Pagination
+                count={pageCount}
+                sx={{ position: 'absolute', bottom: 20, right: 20 }}
+                page={currentPage}
+                onChange={handleChangePage}
+              />
+            }
+          </Grid>
         </Grid>
       </MainCard>
     </>
