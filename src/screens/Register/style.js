@@ -1,8 +1,8 @@
 import { CssConstant } from "../../assets/constant/constant"
 import { makeStyles } from '@mui/styles'
 
-export const useStyles = makeStyles({
-  ...CssConstant,
+export const useStyles = makeStyles(theme => ({
+  ...CssConstant(theme),
   root: {
     width: '100vw',
     height: '100vh',
@@ -95,4 +95,4 @@ export const useStyles = makeStyles({
       color: '#00ff7f'
     }
   }
-})
+}))

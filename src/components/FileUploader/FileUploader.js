@@ -70,9 +70,12 @@ const Preview = (props) => {
 
 const FileUploader = (props) => {
   const { preview, onChange } = props
-  const useStyles = makeStyles(CssConstant)
-  const classes = useStyles()
   const theme = useTheme()
+  
+  const useStyles = makeStyles(theme => ({
+    ...CssConstant(theme)
+  }))
+  const classes = useStyles()
 
   const [files, setFiles] = useState([])
 
@@ -83,7 +86,6 @@ const FileUploader = (props) => {
   }
 
   const onDrop = (acceptedFiles, rejectedFiles, event) => {
-    setFiles([...files.concat(acceptedFiles.map(item => URL.createObjectURL(item)))])
     acceptedFiles.forEach(file => {
       cupCakeClient.uploadFile({
         file: file,
@@ -129,6 +131,7 @@ const FileUploader = (props) => {
                 <aside style={thumbsContainer}>
                   <Preview
                     files={files}
+                    waiting={waiting}
                     onRemoveFile={onRemoveFile}
                   />
                 </aside>

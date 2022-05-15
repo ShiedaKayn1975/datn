@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { TextField, Stack, Box, Rating } from '@mui/material'
 import { styled } from '@mui/system';
-import FileUploader from '../../components/FileUploader/FileUploader';
-import StackInput from '../../components/Input/StackInput';
 import AsyncSelect from 'react-select/async';
 import { customStyles, makeId } from '../../utils';
 import CategoryResource from '../../resources/CategoryResource';
 import TinyEditorComponent from '../../components/TinyEditor/TinyEditorComponent';
+import { MultiFileUploader } from '../../components/MultiFileUploader';
 
 const DivComponent = styled('div')({
   marginBottom: 12
@@ -76,8 +75,13 @@ const ProductForm = (props) => {
         </DivComponent>
         <DivComponent>
           <Box fontWeight={'bold'} fontSize={13} marginBottom={1} >Images</Box>
-          <FileUploader
+          {/* <FileUploader
             preview={true}
+            onChange={(files) => {
+              handleChange('images', files)
+            }}
+          /> */}
+          <MultiFileUploader
             onChange={(files) => {
               handleChange('images', files)
             }}

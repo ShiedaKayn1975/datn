@@ -81,7 +81,29 @@ export default class JsonApiClient {
   }
 
   loadResource = (type, id, { done, error, resourcePath, params, relatives }) => {
+    if (!type) throw "Action loadResource: type is required"
 
+    let path = resourcePath || this.client.getResourcePath(type, id)
+
+    return this.client.get(path, { params: params })
+      .then(response => {
+        let item = resourcesMapper(response.data)
+        let meta = parseResourceMeta(response.data)
+        if (item && relatives) {
+          this.buildRelatives(item, relatives, {
+            done: (item) => {
+              if (done) done(item, meta)
+            }, error: (errors) => {
+              if (error) error(errors)
+              if (done) done(item, meta)
+            }
+          })
+        } else {
+          if (done) done(item, meta)
+        }
+      }).catch(event => {
+        if (error) error(this.errorParser(event))
+      })
   }
 
   createResource = (type, data, { done, error, resourcePath, params, relatives }) => {

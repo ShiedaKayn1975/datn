@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PaperItem from '../../components/Paper/PaperItem'
-import { Grid, Typography, Breadcrumbs, Link, Stack, Button, ImageListItem, ImageListItemBar, IconButton } from '@mui/material'
+import { Grid, Typography, Breadcrumbs, Rating, Stack, Button, ImageListItem, ImageListItemBar, IconButton } from '@mui/material'
 import { useTheme } from '@mui/material'
 import { IconHome } from '@tabler/icons'
 import { MainCard } from '../../components/Card'
@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import UserResource from '../../resources/User'
 import InfoIcon from '@mui/icons-material/Info';
 import moment from 'moment'
+import { useNavigate } from "react-router-dom";
 
 const schema = {
   name: {
@@ -32,6 +33,7 @@ const Product = (props) => {
   const theme = useTheme()
   const [products, setProducts] = useState(null)
   const XS_GRID = 3
+  const navigate = useNavigate()
 
   useEffect(() => {
     loadItems()
@@ -74,6 +76,15 @@ const Product = (props) => {
           console.log(submitData)
           return new Promise((resolve, reject) => {
             const data = submitData.values
+
+            data.categories = data.categories.map(category => {
+              delete category.id
+              delete category.created_at
+              delete category.updated_at
+
+              return category
+            })
+
             ProductResource.loader.createItem({
               data: data,
               done: (response) => {
@@ -121,7 +132,7 @@ const Product = (props) => {
                 width: 'max-content'
               }}
             >
-              <Button variant='outlined' endIcon={<IconCaretDown fill={theme.palette.primary.main} />} >More actions</Button>
+              {/* <Button variant='outlined' endIcon={<IconCaretDown fill={theme.palette.primary.main} />} >More actions</Button> */}
               <Button variant='contained'
                 onClick={newProduct}
               >New product</Button>
@@ -144,6 +155,9 @@ const Product = (props) => {
                   <PaperItem key={index}>
                     <ImageListItem key={index}
                       style={{height: 180, width: 270, cursor: 'pointer'}}
+                      onClick={() => {
+                        navigate(`/products/${product.id}`)
+                      }}
                     >
                       <img
                         src={`${product.images?.[0] || "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.hhireb.com%2Ffalls-featured-attraction-the-art-cafe%2F&psig=AOvVaw0tp_GGwEnY3rA-4J45aWTE&ust=1652433602334000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCKiZhYHR2fcCFQAAAAAdAAAAABAI"}`}
@@ -153,14 +167,13 @@ const Product = (props) => {
                         key={index}
                         title={product.name}
                         subtitle={moment(product.created_at).format('lll')}
-                        actionIcon={
-                          <IconButton
-                            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                            aria-label={`info about ${product.name}`}
-                          >
-                            <InfoIcon />
-                          </IconButton>
-                        }
+                        // actionIcon={
+                        //   <IconButton
+                        //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                        //     aria-label={`info about ${product.name}`}
+                        //   >
+                        //   </IconButton>
+                        // }
                       />
                     </ImageListItem>
                   </PaperItem>
