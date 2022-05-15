@@ -5,39 +5,34 @@ export default class AxiosClient {
     this.client = props.client
     this.resourceName = props.resourceName
     this.defaultParams = props.defaultParams || {}
-    this.relatives = props.relatives || {}
     this.jsonApiClient = new JsonApiClient({
       client: this.client
     })
   }
 
-  fetchItems = ({filters, paging, sorts, options, download, params, done, error, dataParser}) => {
+  fetchItems = ({filters, paging, sorts, options, download, params, done, error, dataParser, relatives}) => {
     params = Object.assign({}, params, this.defaultParams)
-    let relatives = this.relatives
     this.jsonApiClient.loadResources(this.resourceName, {
       filters, paging, options, download, sorts, params, done, error, relatives, dataParser
     })
   }
 
-  fetchItem = ({ id, done, error, params}) => {
+  fetchItem = ({ id, done, error, params, relatives}) => {
     params = Object.assign({}, params, this.defaultParams)
-    let relatives = this.relatives
     this.jsonApiClient.loadResource(this.resourceName, id, {
       params, done, error, relatives
     })
   }
 
-  createItem = ({ data, params, done, error }) => {
+  createItem = ({ data, params, done, error, relatives }) => {
     params = Object.assign({}, params, this.defaultParams)
-    let relatives = this.relatives
     this.jsonApiClient.createResource(this.resourceName, data, {
       params, done, error, relatives
     })
   }
 
-  updateItem = ({ id, data, params, done, error }) => {
+  updateItem = ({ id, data, params, done, error, relatives }) => {
     params = Object.assign({}, params, this.defaultParams)
-    let relatives = this.relatives
     this.jsonApiClient.updateResource(this.resourceName, id, data, {
       params, done, error, relatives
     })

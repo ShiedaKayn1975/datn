@@ -4,11 +4,106 @@ export default class JsonApiClient {
   }
 
   loadResources = (type, { filters, paging, sorts, done, error, download, relatives, resourcePath, dataParser, params }) => {
+    if (!type) throw "Action loadResources: type is required"
 
+    let requestParams = {
+      params: {
+        ...params,
+        ...filter_hash_to_param(filters),
+      },
+      headers: {}
+    }
+
+    if (paging) {
+      if (paging.page) requestParams.params['page[number]'] = paging.page
+      if (paging.perPage) requestParams.params['page[size]'] = paging.perPage
+    }
+
+    if (sorts) {
+      requestParams.params.sort = sorts.map((sort) =>
+        sort.dir === 'asc' ? sort.name : ('-' + sort.name)
+      ).join(',')
+    }
+
+    if (download) {
+      requestParams.responseType = "arraybuffer"
+    }
+
+    let path = resourcePath || this.client.getResourcePath(type)
+
+    return this.client.get(path, requestParams)
+      .then(response => {
+        if (download) {
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', `${download.name}`)
+          document.body.appendChild(link);
+          link.click()
+
+          if (done) done(response.data)
+        } else {
+          let items = dataParser ? dataParser(response) : resourcesMapper(response.data)
+          let meta = parseResourceMeta(response.data)
+
+          if (items.length > 0 && relatives) {
+            Object.keys(relatives).forEach((key) => {
+              let rel = relatives[key]
+              let rel_name = rel.resource || key
+              let ids = [...new Set(items.map((item) => item[rel.foreignKey]).filter((id) => !!id))]
+              let loader = rel.loader?.jsonApiClient || this
+
+              if (ids.length > 0) {
+                loader.loadResources(rel_name, {
+                  filters: { 'ids': ids.join(',') }, params: rel.params, done: (relItems) => {
+                    items.forEach((item) => {
+                      item[key] = relItems.find((it) => String(it.id) === String(item[rel.foreignKey]))
+                    })
+
+                    if (done) done(items, meta)
+                  }, error: (event) => {
+                    if (done) done(items, meta)
+                    if (error) error(event)
+                  }
+                })
+              } else {
+                if (done) done(items, meta)
+              }
+            })
+          } else {
+            if (done) done(items, meta)
+          }
+        }
+      })
+      .catch(event => {
+        if (error) error(this.errorParser(event))
+      })
   }
 
   loadResource = (type, id, { done, error, resourcePath, params, relatives }) => {
+    if (!type) throw "Action loadResource: type is required"
 
+    let path = resourcePath || this.client.getResourcePath(type, id)
+
+    return this.client.get(path, { params: params })
+      .then(response => {
+        let item = resourcesMapper(response.data)
+        let meta = parseResourceMeta(response.data)
+        if (item && relatives) {
+          this.buildRelatives(item, relatives, {
+            done: (item) => {
+              if (done) done(item, meta)
+            }, error: (errors) => {
+              if (error) error(errors)
+              if (done) done(item, meta)
+            }
+          })
+        } else {
+          if (done) done(item, meta)
+        }
+      }).catch(event => {
+        if (error) error(this.errorParser(event))
+      })
   }
 
   createResource = (type, data, { done, error, resourcePath, params, relatives }) => {
@@ -23,22 +118,22 @@ export default class JsonApiClient {
       },
       ...params
     }).then(response => {
-        let item = resourcesMapper(response.data)
-        let meta = parseResourceMeta(response.data)
-        
-        if (item && relatives) {
-          this.buildRelatives(item, relatives, {
-            done: (item) => {
-              if (done) done(item, meta)
-            }, error: (errors) => {
-              if (error) error(errors)
-              if (done) done(item, meta)
-            }
-          })
-        } else {
-          if (done) done(item, meta)
-        }
-      })
+      let item = resourcesMapper(response.data)
+      let meta = parseResourceMeta(response.data)
+
+      if (item && relatives) {
+        this.buildRelatives(item, relatives, {
+          done: (item) => {
+            if (done) done(item, meta)
+          }, error: (errors) => {
+            if (error) error(errors)
+            if (done) done(item, meta)
+          }
+        })
+      } else {
+        if (done) done(item, meta)
+      }
+    })
       .catch(event => {
         console.error(event)
         if (error) error(this.errorParser(event))

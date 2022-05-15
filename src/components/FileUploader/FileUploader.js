@@ -4,6 +4,8 @@ import { CssConstant } from '../../assets/constant/constant'
 import { makeStyles } from '@mui/styles'
 import { Divider, useTheme } from '@mui/material'
 import { cupCakeClient } from '../../services'
+import { toast } from 'react-toastify'
+import { IconX } from '@tabler/icons'
 
 const thumbsContainer = {
   display: 'flex',
@@ -27,7 +29,8 @@ const thumb = {
 const thumbInner = {
   display: 'flex',
   minWidth: 0,
-  overflow: 'hidden'
+  overflow: 'hidden', 
+  position: 'relative'
 };
 
 const img = {
@@ -49,6 +52,14 @@ const Preview = (props) => {
                 style={img}
                 key={`file-${index}`}
               />
+              {
+                props.onRemoveFile &&
+                <IconX style={{backgroundColor: 'white', cursor: 'pointer', position: 'absolute', top: 0, right: 0}}
+                onClick={() => {
+                  props.onRemoveFile(file)
+                }}
+              />
+              }
             </div>
           </div>
         ))
@@ -58,24 +69,34 @@ const Preview = (props) => {
 }
 
 const FileUploader = (props) => {
-  const { preview } = props
-  const useStyles = makeStyles(CssConstant)
-  const classes = useStyles()
+  const { preview, onChange } = props
   const theme = useTheme()
+  
+  const useStyles = makeStyles(theme => ({
+    ...CssConstant(theme)
+  }))
+  const classes = useStyles()
 
   const [files, setFiles] = useState([])
 
+  const onRemoveFile = (file) => {
+    let fileLst = files.filter(f => f != file)
+    setFiles(fileLst)
+    onChange(fileLst)
+  }
+
   const onDrop = (acceptedFiles, rejectedFiles, event) => {
-    setFiles([...files.concat(acceptedFiles.map(item => URL.createObjectURL(item)))])
     acceptedFiles.forEach(file => {
       cupCakeClient.uploadFile({
         file: file,
         params: {public: true},
         done: (response) => {
-
+          let values = [...files, response.file_url]
+          setFiles(values)
+          onChange(values)
         },
         error: (error) => {
-          
+          toast.error("Upload file error!")
         }
       })
     })
@@ -110,6 +131,8 @@ const FileUploader = (props) => {
                 <aside style={thumbsContainer}>
                   <Preview
                     files={files}
+                    waiting={waiting}
+                    onRemoveFile={onRemoveFile}
                   />
                 </aside>
               </div>

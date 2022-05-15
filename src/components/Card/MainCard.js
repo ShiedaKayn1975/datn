@@ -10,30 +10,30 @@ const headerSX = {
 };
 
 const ActionGenerator = (props) => {
-  
+
   return (
     <>
       {
         props.actions ?
-        <>
-          {
-            props.actions?.map((action, key) => (
-              <IconButton
-                onClick={action.onClick}
-                key={key}
-                style={{
-                  cursor: 'pointer',
-                  width: 'auto',
-                  borderRadius: 10,
-                }}
-              >
-                {action.title()}
-              </IconButton>
-            ))
-          }
-        </>
-        :
-        <></>
+          <>
+            {
+              props.actions?.map((action, key) => (
+                <IconButton
+                  onClick={action.onClick}
+                  key={key}
+                  style={{
+                    cursor: 'pointer',
+                    width: 'auto',
+                    borderRadius: 10,
+                  }}
+                >
+                  {action.title()}
+                </IconButton>
+              ))
+            }
+          </>
+          :
+          <></>
       }
     </>
   )
@@ -76,15 +76,20 @@ const MainCard = forwardRef(
         }}
       >
         {
-          customHeader ?
-            customHeader
-            :
-            <>
-              {!darkTitle && title && <CardHeader sx={headerSX} title={title} action={<ActionGenerator actions={actionHeaders} />} />}
-              {darkTitle && title && (
-                <CardHeader sx={headerSX} title={<Typography variant={variantTitle || 'h3'}>{title}</Typography>} action={<ActionGenerator actions={actionHeaders} />} />
-              )}
-            </>
+          (customHeader || title) &&
+          <>
+            {
+              customHeader ?
+                customHeader
+                :
+                <>
+                  {!darkTitle && title && <CardHeader sx={headerSX} title={title} action={<ActionGenerator actions={actionHeaders} />} />}
+                  {darkTitle && title && (
+                    <CardHeader sx={headerSX} title={<Typography variant={variantTitle || 'h3'}>{title}</Typography>} action={<ActionGenerator actions={actionHeaders} />} />
+                  )}
+                </>
+            }
+          </>
         }
 
         {(title || customHeader) && <Divider />}

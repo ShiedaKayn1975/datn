@@ -6,6 +6,7 @@ import {
 import validate from 'validate.js'
 import { toast } from 'react-toastify'
 import CircularProgress from '@mui/material/CircularProgress';
+import { DefaultApiErrorHandler } from '../../utils';
 
 const instance = {}
 
@@ -66,7 +67,13 @@ export default class FormModal extends React.Component {
     } else {
       this.setState({ submitting: true })
       if(config.action.onSubmit){
-        config.action.onSubmit(submitData, this.handleChange, this)
+        config.action.onSubmit(submitData, this.handleChange, this).then(response => {
+          toast.success("Success")
+          this.handleClose()
+        }).catch(error => {
+          toast.error(DefaultApiErrorHandler(error).message)
+          this.setState({ submitting: false })
+        }) 
       }
     }
   }
@@ -86,7 +93,7 @@ export default class FormModal extends React.Component {
           sx={{
             zIndex: open ? 2000 : -1,
           }}
-          maxWidth='sm'
+          maxWidth='md'
           fullWidth
         >
           {

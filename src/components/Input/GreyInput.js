@@ -4,8 +4,11 @@ import { useInput } from '@mui/base';
 import { styled } from '@mui/system';
 import { CssConstant } from '../../assets/constant';
 import { makeStyles } from '@mui/styles'
+import { useTheme } from '@mui/material';
 
-const useStyles = makeStyles(CssConstant)
+const useStyles = makeStyles(theme => ({
+  ...CssConstant(theme)
+}))
 
 const StyledInputElement = styled('input')(
   ({ theme }) => ({

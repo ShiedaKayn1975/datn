@@ -18,18 +18,23 @@ import MainLayout from './layout/MainLayout'
 import Account from './screens/Account/account'
 import { Product } from './screens/Product'
 import { Order } from './screens/Order'
+import { ProductDetail } from './screens/ProductDetail'
 
 const components = [
   {
-    path: 'account',
+    path: '/account',
     component: Account
   },
   {
-    path: 'products',
+    path: '/products/:id',
+    component: ProductDetail
+  },
+  {
+    path: '/products',
     component: Product
   },
   {
-    path: 'orders',
+    path: '/orders',
     component: Order
   }
 ]
@@ -74,8 +79,8 @@ const AppInitialize = (props) => {
 
   if (!peckPortalClient.hasToken()) {
     return <props.children
-    appReady={false}
-  />
+      appReady={false}
+    />
   }
 
   if (loadingState.currentUser == 'failed') {
@@ -113,7 +118,6 @@ const AppProvider = (props) => {
               {
                 ({ appReady, currentUser, loadingState }) => (
                   <>
-                  {console.log(appReady)}
                     {
                       (currentUser?.status == 'validating' && loadingState.currentUser == 'success') &&
                       <Routes>
@@ -136,10 +140,13 @@ const AppProvider = (props) => {
                     {
                       (currentUser?.status == 'active' && loadingState?.currentUser == 'success') &&
                       <Routes>
-                        <Route path='/' element={<MainLayout />} >
+                        <Route element={<MainLayout />} >
                           {
                             components.map((component, index) => {
-                              return <Route key={index} path={component.path} element={<component.component />} />
+                              console.log(component)
+                              return <Route key={index} path={component.path} element={
+                                <component.component history={appHistory} currentUser={currentUser} />
+                              } />
                             })
                           }
                         </Route>
