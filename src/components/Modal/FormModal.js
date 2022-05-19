@@ -1,8 +1,5 @@
 import React from 'react'
-import {
-  Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Divider,
-  Typography, ClickAwayListener
-} from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider } from '@mui/material'
 import validate from 'validate.js'
 import { toast } from 'react-toastify'
 import CircularProgress from '@mui/material/CircularProgress';

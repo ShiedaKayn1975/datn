@@ -23,10 +23,7 @@ const schema = {
   },
   quality_commitment: {
     presence: { allowEmpty: false, message: '^Required' },
-  },
-  price: {
-    presence: { allowEmpty: false, message: '^Required' },
-  },
+  }
 }
 
 const Product = (props) => {

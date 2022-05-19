@@ -98,7 +98,7 @@ const ProductForm = (props) => {
             }}
           />
         </DivComponent>
-        <DivComponent>
+        {/* <DivComponent>
           <Box fontWeight={'bold'} fontSize={13} marginBottom={1} >Price<span style={{color: 'red'}}>*</span></Box>
           <TextField fullWidth
             onChange={handleChangeText}
@@ -112,7 +112,7 @@ const ProductForm = (props) => {
             }}
           />
           {hasError('price') && <small style={{ color: 'red' }}>{submitData.errors.price[0]}</small>}
-        </DivComponent>
+        </DivComponent> */}
         <DivComponent>
           <Box fontWeight={'bold'} fontSize={13} marginBottom={1} >Quality commitment<span style={{color: 'red'}}>*</span></Box>
           <Rating

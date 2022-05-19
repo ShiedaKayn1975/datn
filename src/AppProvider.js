@@ -22,6 +22,10 @@ import { ProductDetail } from './screens/ProductDetail'
 
 const components = [
   {
+    path: '/',
+    component: Product
+  },
+  {
     path: '/account',
     component: Account
   },
@@ -143,7 +147,6 @@ const AppProvider = (props) => {
                         <Route element={<MainLayout />} >
                           {
                             components.map((component, index) => {
-                              console.log(component)
                               return <Route key={index} path={component.path} element={
                                 <component.component history={appHistory} currentUser={currentUser} />
                               } />
