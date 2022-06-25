@@ -19,29 +19,57 @@ import Account from './screens/Account/account'
 import { Product } from './screens/Product'
 import { Order } from './screens/Order'
 import { ProductDetail } from './screens/ProductDetail'
+import { selectApp } from './actions/appAction'
+import { CustomerProduct } from './screens/customers'
+import Auction from './screens/Auction'
+import AuctionDetail from './screens/Auction/detail'
 
-const components = [
-  {
-    path: '/',
-    component: Product
-  },
-  {
-    path: '/account',
-    component: Account
-  },
-  {
-    path: '/products/:id',
-    component: ProductDetail
-  },
-  {
-    path: '/products',
-    component: Product
-  },
-  {
-    path: '/orders',
-    component: Order
-  }
-]
+const components = {
+  seller: [
+    {
+      path: '/',
+      component: Product
+    },
+    {
+      path: '/account',
+      component: Account
+    },
+    {
+      path: '/products/:id',
+      component: ProductDetail
+    },
+    {
+      path: '/products',
+      component: Product
+    },
+    {
+      path: '/orders',
+      component: Order
+    },
+    {
+      path: '/auctions',
+      component: Auction
+    },
+    {
+      path: '/auctions/:id',
+      component: AuctionDetail
+    }
+  ],
+  customer: [
+    {
+      path: '/',
+      component: CustomerProduct
+    },
+    {
+      path: '/account',
+      component: Account
+    },
+    {
+      path: '/customer/products',
+      component: CustomerProduct
+    }
+  ]
+}
 
 const loggerStore = store => next => action => {
   console.group(action.type)
@@ -58,8 +86,14 @@ const appStore = configureStore({}, [
   loggerStore
 ])
 
+const onSelectApp = (app) => {
+  appStore.dispatch(selectApp(app))
+  window.location.href = '/'
+}
+
 const AppInitialize = (props) => {
   const currentUser = useSelector(state => state.currentUser)
+  const currentApp = useSelector(state => state.currentApp)
   const loadingState = useSelector(state => state.loadingState)
   const dispatch = useDispatch()
 
@@ -69,13 +103,14 @@ const AppInitialize = (props) => {
     }
   }, [currentUser])
 
-  if (currentUser) {
+  if (currentUser && currentApp) {
     return (
       <AppContext.Provider value={{ currentUser }}>
         <props.children
           appReady={true}
           currentUser={currentUser}
           loadingState={loadingState}
+          currentApp={currentApp}
         />
       </AppContext.Provider>
     )
@@ -120,7 +155,7 @@ const AppProvider = (props) => {
           <BrowserRouter history={appHistory}>
             <AppInitialize>
               {
-                ({ appReady, currentUser, loadingState }) => (
+                ({ appReady, currentUser, loadingState, currentApp }) => (
                   <>
                     {
                       (currentUser?.status == 'validating' && loadingState.currentUser == 'success') &&
@@ -144,9 +179,9 @@ const AppProvider = (props) => {
                     {
                       (currentUser?.status == 'active' && loadingState?.currentUser == 'success') &&
                       <Routes>
-                        <Route element={<MainLayout />} >
+                        <Route element={<MainLayout onSelectApp={onSelectApp} />} >
                           {
-                            components.map((component, index) => {
+                            components[currentApp].map((component, index) => {
                               return <Route key={index} path={component.path} element={
                                 <component.component history={appHistory} currentUser={currentUser} />
                               } />

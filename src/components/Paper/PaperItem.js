@@ -14,6 +14,7 @@ const PaperItem = forwardRef(
       shadow,
       lineHeight,
       borderRadius,
+      minHeight,
       sx={},
       children,
       ...others
@@ -30,6 +31,7 @@ const PaperItem = forwardRef(
           color: color,
           marginTop: marginTop,
           height: height,
+          minHeight: minHeight,
           lineHeight: lineHeight,
           borderRadius: borderRadius,
           ':hover': {

@@ -1,6 +1,11 @@
 import { ActionableExceptionHandler } from "./ActionableErrorHandler";
 import { DefaultApiErrorHandler } from "./DefaultApiErrorHandler";
 
+const formatterCurrentcy = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
 const customStyles = (error) => {
   return {
     control: (provided, state) => ({
@@ -45,9 +50,18 @@ const makeId = (length) => {
   return result;
 };
 
+const statusLabelMapper = {
+  cancelled: '#ffab91',
+  waiting: '#ffe57f',
+  active: '#00e676',
+  finished: '#673ab7'
+}
+
 export {
   ActionableExceptionHandler,
   DefaultApiErrorHandler, 
   customStyles,
-  makeId
+  makeId,
+  statusLabelMapper,
+  formatterCurrentcy
 }

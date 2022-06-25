@@ -24,6 +24,11 @@ export const loadProfile = () => dispatch => {
 			}
 		})
 
+		dispatch({
+			type: 'SELECT_APP',
+			app: response.data.user.current_app
+		})
+
 		if(response.data.current_step){
 			dispatch({
 				type: 'UPDATE_SECURITY_GATEWAYS',

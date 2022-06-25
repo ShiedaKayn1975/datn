@@ -187,7 +187,7 @@ const Product = (props) => {
           }
           <Grid item xs={12}>
             {
-              pageCount &&
+              !!pageCount &&
               <Pagination
                 count={pageCount}
                 sx={{ position: 'absolute', bottom: 20, right: 20 }}

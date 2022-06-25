@@ -10,10 +10,10 @@ import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';
 
 import { IconMenu2 } from '@tabler/icons';
-
+import SwitchAppSection from './SwitchAppSection';
 import AccountBalance from './AccountBalance';
 
-const Header = ({ handleLeftDrawerToggle }) => {
+const Header = ({ handleLeftDrawerToggle, onSelectApp }) => {
   const theme = useTheme();
 
   return (
@@ -53,13 +53,14 @@ const Header = ({ handleLeftDrawerToggle }) => {
       </Box>
 
       {/* header search */}
-      <SearchSection />
+      {/* <SearchSection /> */}
+      <SwitchAppSection onSelectApp={onSelectApp} />
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}
-      <AccountBalance/>
-      <NotificationSection />
+      {/* <AccountBalance/>
+      <NotificationSection /> */}
       <ProfileSection />
     </>
   );

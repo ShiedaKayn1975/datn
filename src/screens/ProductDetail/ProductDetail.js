@@ -18,7 +18,8 @@ import FormModal from '../../components/Modal/FormModal'
 import { NewCampaignForm } from '../../components/Form'
 import { ActionableExceptionHandler } from '../../utils'
 import AuctionProductResource from '../../resources/AuctionProductResource'
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { statusLabelMapper } from '../../utils'
+import { useNavigate } from 'react-router-dom'
 
 const CustomTab = styled(Tab)(({ theme }) => ({
   minHeight: 50,
@@ -31,6 +32,9 @@ const schema = {
     presence: { allowEmpty: false, message: '^Required' },
   },
   price: {
+    presence: { allowEmpty: false, message: '^Required' },
+  },
+  start_at: {
     presence: { allowEmpty: false, message: '^Required' },
   }
 }
@@ -62,6 +66,7 @@ const ProductDetail = (props) => {
   const [images, setImages] = useState([])
   const [currentTab, setCurrentTab] = useState(0)
   const [auctions, setAuctions] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     const id = params.id
@@ -70,6 +75,7 @@ const ProductDetail = (props) => {
 
   const getAuction = () => {
     AuctionProductResource.loader.fetchItems({
+      paging: {page: 0, perPage: 10},
       filters: {
         product_id: product.id
       },
@@ -114,7 +120,7 @@ const ProductDetail = (props) => {
 
   const newCampaign = () => {
     FormModal.show({
-      title: 'New Campaign',
+      title: 'New Auction',
       submitData: {
         id: product.id
       },
@@ -153,23 +159,38 @@ const ProductDetail = (props) => {
     })
   }
 
-  const startAuction = (auction) => {
+  const cancelAuction = (auction) => {
     const action_data = {
       auction_id: auction.id
     }
 
-    ProductResource.loader.commitAction({
-      id: product.id,
-      data: {
-        action_code: 'start_auction',
-        action_data: action_data
-      },
-      done: (response) => {
-        getAuction()
-        toast.success("Success")
-      },
-      error: (error) => {
-        toast.error(ActionableExceptionHandler(error).message)
+    FormModal.show({
+      title: 'Cancel Auction',
+      submitData: {},
+      renderComponent: ({ submitData, handleChange }) => <div>Are you sure?</div>
+      ,
+      action: {
+        title: "OK",
+        onSubmit: (submitData, handleChange, ctx) => {
+          return new Promise((resolve, reject) => {
+            ProductResource.loader.commitAction({
+              id: product.id,
+              data: {
+                action_code: 'cancel_auction',
+                action_data: action_data
+              },
+              done: (response) => {
+                getAuction()
+                toast.success("Success")
+                resolve(true)
+              },
+              error: (error) => {
+                toast.error(ActionableExceptionHandler(error).message)
+                reject(true)
+              }
+            })
+          })
+        }
       }
     })
   }
@@ -244,7 +265,7 @@ const ProductDetail = (props) => {
                 <ToolBarAction
                   rightActions={[
                     {
-                      text: 'New Campaign',
+                      text: 'New Auction',
                       color: 'primary',
                       visible: true,
                       action: () => {
@@ -293,15 +314,6 @@ const ProductDetail = (props) => {
                             </TableCell>
                             <TableCell align="center" sx={{ paddingTop: 1, paddingBottom: 1 }}>{product.name}</TableCell>
                           </TableRow>
-                          {/* <TableRow
-                          key={'price'}
-                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            <span style={{ fontWeight: 'bold' }}>Price:</span>
-                          </TableCell>
-                          <TableCell align="center">{product.price}</TableCell>
-                        </TableRow> */}
                           <TableRow
                             key={'categories'}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -335,28 +347,36 @@ const ProductDetail = (props) => {
                   >
                     <TableContainer component={Paper}>
                       <Table sx={{ minWidth: 650 }} aria-label="simple table" size='small'>
+                        <TableHead>
+                          <TableCell align='center'><b>Title</b></TableCell>
+                          <TableCell align='center'><b>Price</b></TableCell>
+                          <TableCell align='center'><b>Status</b></TableCell>
+                          <TableCell align='center'><b>Created at</b></TableCell>
+                          <TableCell align='center'><b>Actions</b></TableCell>
+                        </TableHead>
                         <TableBody>
                           {auctions.map((auction, index) => (
                             <TableRow
+                              hover
                               key={index}
-                              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                              sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }}
+                              onClick={() => navigate(`/auctions/${auction.id}`)}
                             >
                               <TableCell align='center'>{auction.title}</TableCell>
                               <TableCell align='center'>${auction.price}</TableCell>
+                              <TableCell align='center'>
+                                <Chip sx={{backgroundColor: statusLabelMapper[auction.status]}} label={auction.status} size='small' />
+                              </TableCell>
                               <TableCell align='center'>{moment(auction.created_at).format('lll')}</TableCell>
                               <TableCell align='center'>
-                                <Stack direction={'row'} spacing={1}>
-                                  {
-                                    auction.status == 'unpublish' &&
-                                    <Button variant='contained'
-                                      onClick={() => startAuction(auction)}
-                                    >Start</Button>
-                                  }
-                                  <IconButton variant='outlined'
+                                {
+                                  auction.status == 'waiting' &&
+                                  <Button variant='contained'
                                     color='error'
-                                    onClick={() => deleteAuction(auction)}
-                                  ><HighlightOffIcon/></IconButton>
-                                </Stack>
+                                    onClick={() => cancelAuction(auction)}
+                                    size='small'
+                                  >Cancel</Button>
+                                }
                               </TableCell>
                             </TableRow>
                           ))}
