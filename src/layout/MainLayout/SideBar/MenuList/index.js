@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Typography } from '@mui/material';
 
 import NavGroup from './NavGroup';
 import menuItems from '../../../menu-items';
+import { useSelector } from 'react-redux';
 
 const MenuList = () => {
-    const navItems = menuItems.items.map((item) => {
+    const currentApp = useSelector(state => state.currentApp)
+    
+    const navItems = menuItems[currentApp || 'seller'].items.map((item) => {
         switch (item.type) {
             case 'group':
                 return <NavGroup key={item.id} item={item} />;

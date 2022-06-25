@@ -20,23 +20,23 @@ const useStyles = makeStyles({
 
 const SendEmailConfirmation = (props) => {
   const classes = useStyles()
-  const [requested, setRequested ] = useState(false)
+  const [requested, setRequested] = useState(false)
   const currentUser = useSelector(state => state.currentUser)
 
   const handleSendEmail = () => {
     toast.info("We sent an activation email to you, please check your email.")
     UserResource.loader.commitAction({
       id: currentUser.id,
-        data: {
-          action_code: 'send_activation_email',
-          action_data: {}
-        },
-        done: (response) => {
-          toast.success("Success")
-        },
-        error: (error) => {
-          toast.error(ActionableExceptionHandler(error).message)
-        }
+      data: {
+        action_code: 'send_activation_email',
+        action_data: {}
+      },
+      done: (response) => {
+        toast.success("Success")
+      },
+      error: (error) => {
+        toast.error(ActionableExceptionHandler(error).message)
+      }
     })
   }
 

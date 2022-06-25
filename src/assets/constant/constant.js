@@ -1,5 +1,5 @@
 export const CssConstant = (theme) => {
-  console.log("theme", theme)
+
   return {
     root: {
       fontFamily: "'Lexend Deca', sans-serif"
@@ -54,9 +54,9 @@ export const CssConstant = (theme) => {
         minHeight: "39px",
       },
       "&.primary": {
-        border: `1px solid ${theme.palette.primary.main}`,
+        border: `1px solid ${theme?.palette?.primary?.main}`,
         boxShadow: "0 1px 0 0 rgba(22,29,37,.05)",
-        background: `${theme.palette.primary.main}`,
+        background: `${theme?.palette?.primary?.main}`,
         color: "#fff",
         "&:hover": {
           background: "#033b2d",
@@ -66,7 +66,7 @@ export const CssConstant = (theme) => {
         border: "none",
         boxShadow: "none",
         background: "transparent",
-        color: `var(--p-interactive, ${theme.palette.primary.main})`,
+        color: `var(--p-interactive, ${theme?.palette?.primary?.main})`,
         "&:hover": {
           textDecoration: "underline !important",
         },
@@ -344,7 +344,7 @@ export const CssConstant = (theme) => {
       outline: "none !important",
       background: "transparent",
       whiteSpace: "nowrap",
-      color: `var(--p-interactive, ${theme.palette.primary.light})`,
+      color: `var(--p-interactive, ${theme?.palette?.primary?.light})`,
       "&:hover": {
         textDecoration: "underline !important",
       },
@@ -406,10 +406,10 @@ export const CssConstant = (theme) => {
       padding: '4px 12px',
       cursor: 'pointer',
       '&.selected': {
-        backgroundColor: `${theme.palette.primary.main}`,
+        backgroundColor: `${theme?.palette?.primary?.main}`,
         color: "#fff",
         fontWeight: "bold",
-        border: `1px solid ${theme.palette.primary.main}`
+        border: `1px solid ${theme?.palette?.primary?.main}`
       }
     },
   }

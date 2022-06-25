@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField, Stack, Box, Rating } from '@mui/material'
+import { TextField, Stack, Box, Rating, InputAdornment } from '@mui/material'
 import { styled } from '@mui/system';
 import AsyncSelect from 'react-select/async';
 import { customStyles, makeId } from '../../utils';
@@ -98,16 +98,21 @@ const ProductForm = (props) => {
             }}
           />
         </DivComponent>
-        <DivComponent>
+        {/* <DivComponent>
           <Box fontWeight={'bold'} fontSize={13} marginBottom={1} >Price<span style={{color: 'red'}}>*</span></Box>
           <TextField fullWidth
             onChange={handleChangeText}
             type='number'
             name='price'
             value={submitData.values.price || ''}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              )
+            }}
           />
           {hasError('price') && <small style={{ color: 'red' }}>{submitData.errors.price[0]}</small>}
-        </DivComponent>
+        </DivComponent> */}
         <DivComponent>
           <Box fontWeight={'bold'} fontSize={13} marginBottom={1} >Quality commitment<span style={{color: 'red'}}>*</span></Box>
           <Rating

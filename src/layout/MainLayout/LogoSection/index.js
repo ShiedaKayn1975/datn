@@ -16,7 +16,7 @@ const LogoSection = () => {
                     marginLeft: 10,
                     color: themes.palette.primary.main
             }}
-            >Give me</h3>
+            >Auction</h3>
         </ButtonBase>
     )
 };

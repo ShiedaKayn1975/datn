@@ -76,7 +76,7 @@ export default class JsonApiClient {
         }
       })
       .catch(event => {
-        if (error) error(this.errorParser(event))
+        if (error) error(errorParser(event))
       })
   }
 
@@ -102,7 +102,7 @@ export default class JsonApiClient {
           if (done) done(item, meta)
         }
       }).catch(event => {
-        if (error) error(this.errorParser(event))
+        if (error) error(errorParser(event))
       })
   }
 
@@ -136,7 +136,7 @@ export default class JsonApiClient {
     })
       .catch(event => {
         console.error(event)
-        if (error) error(this.errorParser(event))
+        if (error) error(errorParser(event))
       })
   }
 

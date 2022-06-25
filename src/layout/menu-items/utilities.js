@@ -1,13 +1,14 @@
-import { IconShoppingCart, IconBuildingFactory } from '@tabler/icons';
+import { IconShoppingCart, IconBuildingFactory, IconListCheck } from '@tabler/icons';
 
 const icons = {
     IconBuildingFactory,
     IconShoppingCart,
+    IconListCheck
 };
 
 const utilities = {
     id: 'utilities',
-    title: 'Utilities',
+    title: 'Features',
     type: 'group',
     children: [
         {
@@ -16,6 +17,14 @@ const utilities = {
             type: 'item',
             url: '/products',
             icon: icons.IconBuildingFactory,
+            breadcrumbs: false
+        },
+        {
+            id: 'auctions',
+            title: 'Auctions',
+            type: 'item',
+            url: '/auctions',
+            icon: icons.IconListCheck,
             breadcrumbs: false
         },
         {
