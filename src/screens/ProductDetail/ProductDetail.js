@@ -20,6 +20,7 @@ import { ActionableExceptionHandler } from '../../utils'
 import AuctionProductResource from '../../resources/AuctionProductResource'
 import { statusLabelMapper } from '../../utils'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const CustomTab = styled(Tab)(({ theme }) => ({
   minHeight: 50,
@@ -66,6 +67,8 @@ const ProductDetail = (props) => {
   const [images, setImages] = useState([])
   const [currentTab, setCurrentTab] = useState(0)
   const [auctions, setAuctions] = useState([])
+  const currentApp = useSelector(selector => selector.currentApp)
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -75,7 +78,7 @@ const ProductDetail = (props) => {
 
   const getAuction = () => {
     AuctionProductResource.loader.fetchItems({
-      paging: {page: 0, perPage: 10},
+      paging: { page: 0, perPage: 10 },
       filters: {
         product_id: product.id
       },
@@ -262,18 +265,25 @@ const ProductDetail = (props) => {
             >
               {
                 product &&
-                <ToolBarAction
-                  rightActions={[
-                    {
-                      text: 'New Auction',
-                      color: 'primary',
-                      visible: true,
-                      action: () => {
-                        newCampaign()
-                      },
-                    }
-                  ]}
-                />
+                <>
+                  {
+                    currentApp == 'seller' ?
+                      <ToolBarAction
+                        rightActions={[
+                          {
+                            text: 'New Auction',
+                            color: 'primary',
+                            visible: true,
+                            action: () => {
+                              newCampaign()
+                            },
+                          }
+                        ]}
+                      />
+                      :
+                      <></>
+                  }
+                </>
               }
             </div>
           </Grid>
@@ -352,7 +362,10 @@ const ProductDetail = (props) => {
                           <TableCell align='center'><b>Price</b></TableCell>
                           <TableCell align='center'><b>Status</b></TableCell>
                           <TableCell align='center'><b>Created at</b></TableCell>
-                          <TableCell align='center'><b>Actions</b></TableCell>
+                          {
+                            currentApp == 'seller' &&
+                            <TableCell align='center'><b>Actions</b></TableCell>
+                          }
                         </TableHead>
                         <TableBody>
                           {auctions.map((auction, index) => (
@@ -365,19 +378,22 @@ const ProductDetail = (props) => {
                               <TableCell align='center'>{auction.title}</TableCell>
                               <TableCell align='center'>${auction.price}</TableCell>
                               <TableCell align='center'>
-                                <Chip sx={{backgroundColor: statusLabelMapper[auction.status]}} label={auction.status} size='small' />
+                                <Chip sx={{ backgroundColor: statusLabelMapper[auction.status] }} label={auction.status} size='small' />
                               </TableCell>
                               <TableCell align='center'>{moment(auction.created_at).format('lll')}</TableCell>
-                              <TableCell align='center'>
-                                {
-                                  auction.status == 'waiting' &&
-                                  <Button variant='contained'
-                                    color='error'
-                                    onClick={() => cancelAuction(auction)}
-                                    size='small'
-                                  >Cancel</Button>
-                                }
-                              </TableCell>
+                              {
+                                currentApp == 'seller' &&
+                                <TableCell align='center'>
+                                  {
+                                    auction.status == 'waiting' &&
+                                    <Button variant='contained'
+                                      color='error'
+                                      onClick={() => cancelAuction(auction)}
+                                      size='small'
+                                    >Cancel</Button>
+                                  }
+                                </TableCell>
+                              }
                             </TableRow>
                           ))}
                         </TableBody>

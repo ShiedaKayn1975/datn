@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   useTheme, Grid, Typography, Stack, Chip, TextField, Avatar, Button, List, ListItem,
-  Divider, ListItemAvatar, ListItemText, Pagination
+  Divider, ListItemAvatar, ListItemText, Pagination, InputAdornment
 } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import AuctionProductResource from '../../resources/AuctionProductResource'
@@ -15,6 +15,33 @@ import { MainCard } from '../../components/Card'
 import User1 from '../../assets/images/users/jinx.jpeg'
 import { peckPortalClient } from '../../Api'
 import config from 'config'
+import { useSelector } from 'react-redux'
+import { UserResource } from '../../resources'
+import { ActionableExceptionHandler } from '../../utils'
+
+const BasicInforHeader = (props) => {
+  return (
+    <div
+      style={{
+        padding: 12
+      }}
+    >
+      <Grid container>
+        <Grid item xs={2}>
+          <Typography variant='h4' fontWeight={'bold'} marginLeft={2}>Comments</Typography>
+        </Grid>
+        <Grid item xs={10}>
+          {
+            props.currentApp == 'customer' &&
+            <Button variant='contained' size='small' sx={{ float: 'right', marginRight: 2 }}
+              onClick={props.newPrice}
+            >Add price</Button>
+          }
+        </Grid>
+      </Grid>
+    </div>
+  )
+}
 
 const AuctionDetail = (props) => {
   const theme = useTheme()
@@ -25,6 +52,7 @@ const AuctionDetail = (props) => {
   const [comments, setComments] = useState([])
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(1)
+  const currentApp = useSelector(state => state.currentApp)
 
   useEffect(() => {
     const id = params.id
@@ -46,12 +74,19 @@ const AuctionDetail = (props) => {
           resource: 'products',
           foreignKey: 'product_id',
           params: {
-            'fields[products]': 'id,name,images'
+            'fields[products]': 'id,name,images,categories'
+          }
+        },
+        winner: {
+          loader: UserResource.loader,
+          resource: 'users',
+          foreignKey: 'winner_id',
+          params: {
+            'fields[users]': 'id,email'
           }
         }
       },
       done: (response) => {
-        console.log(response)
         setAuction(response)
       },
       error: (err) => {
@@ -111,8 +146,62 @@ const AuctionDetail = (props) => {
     setPage(page)
   }
 
+  const newPrice = () => {
+    FormModal.show({
+      title: 'New price auction',
+      submitData: {},
+      renderComponent: ({ submitData, handleChange }) => <div>
+        <TextField
+          fullWidth
+          value={submitData.values.price}
+          type='number'
+          onChange={(event) => {
+            handleChange('price', event.target.value)
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">$</InputAdornment>
+            )
+          }}
+        />
+      </div>
+      ,
+      action: {
+        title: "Add price",
+        onSubmit: (submitData, handleChange, ctx) => {
+          return new Promise((resolve, reject) => {
+            if(submitData.values.price){
+              AuctionProductResource.loader.commitAction({
+                id: auction.id,
+                data: {
+                  action_code: 'comment_auction',
+                  action_data: {
+                    type: 'add_price',
+                    content: submitData.values.price
+                  }
+                },
+                done: (response) => {
+                  getComments()
+                  toast.success("Success")
+                  resolve(true)
+                },
+                error: (error) => {
+                  toast.error(ActionableExceptionHandler(error).message)
+                  reject(true)
+                }
+              })
+            }else{
+              toast.error("Price cannot be blank")
+            }
+          })
+        }
+      }
+    })
+  }
+
   return (
     <div>
+      <FormModal />
       {
         auction ?
           <PaperItem
@@ -173,13 +262,15 @@ const AuctionDetail = (props) => {
                       <MainCard>
                         <Stack spacing={1}>
                           <Typography>Initial Price: {formatterCurrentcy.format(auction.price)}</Typography>
-                          <Typography>Current Highest Price:</Typography>
-                          <Typography>Current winner:</Typography>
+                          <Typography>Current Highest Price: ${auction.current_price || 0}</Typography>
+                          <Typography>Current winner: {auction.winner?.email}</Typography>
                         </Stack>
                       </MainCard>
                     </Grid>
                     <Grid item xs={12}>
-                      <MainCard title={'Comments'}>
+                      <MainCard
+                        customHeader={<BasicInforHeader currentApp={currentApp} newPrice={newPrice} />}
+                      >
                         <Grid container spacing={1}>
                           <Grid item xs={1}>
                             <Stack>
@@ -205,6 +296,7 @@ const AuctionDetail = (props) => {
                                 <Button variant='contained'
                                   onClick={onSubmitComment}
                                   sx={{ float: 'right' }}
+                                  size='small'
                                 >
                                   Submit
                                 </Button>
@@ -232,10 +324,16 @@ const AuctionDetail = (props) => {
                                         >
                                           {moment(item.created_at).format('lll')}
                                         </Typography>
-                                        <div>{
-                                          item.action_data.type == 'comment' &&
-                                          <>Comment: {item.action_data.content}</>
-                                        }</div>
+                                        <div>
+                                          {
+                                            item.action_data.type == 'comment' &&
+                                            <>Comment: {item.action_data.content}</>
+                                          }
+                                          {
+                                            item.action_data.type == 'add_price' &&
+                                            <>Add new price: ${item.action_data.content}</>
+                                          }
+                                        </div>
                                       </React.Fragment>
                                     }
                                   />
@@ -259,7 +357,11 @@ const AuctionDetail = (props) => {
                 </Grid>
                 <Grid item xs={4}>
                   <MainCard>
-
+                    <img src={auction.product.images?.[0]} width='100%' />
+                    <Stack spacing={1}>
+                      <div><b>Name:</b> {auction.product.name}</div>
+                      <div><b>Category:</b> {auction.product.categories.map(item => item.name).join(",")}</div>
+                    </Stack>
                   </MainCard>
                 </Grid>
               </Grid>

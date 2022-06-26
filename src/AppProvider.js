@@ -58,7 +58,7 @@ const components = {
   customer: [
     {
       path: '/',
-      component: CustomerProduct
+      component: Product
     },
     {
       path: '/account',
@@ -67,7 +67,23 @@ const components = {
     {
       path: '/customer/products',
       component: CustomerProduct
-    }
+    },
+    {
+      path: '/auctions',
+      component: Auction
+    },
+    {
+      path: '/auctions/:id',
+      component: AuctionDetail
+    },
+    {
+      path: '/products/:id',
+      component: ProductDetail
+    },
+    {
+      path: '/products',
+      component: Product
+    },
   ]
 }
 

@@ -106,7 +106,7 @@ const Auction = (props) => {
                 <TableCell width={'4%'}><Typography variant='h5' fontWeight={'bold'}>Price</Typography></TableCell>
                 <TableCell width={'16%'}><Typography variant='h5' fontWeight={'bold'}>Created at</Typography></TableCell>
                 <TableCell width={'16%'}><Typography variant='h5' fontWeight={'bold'}>Start at</Typography></TableCell>
-                <TableCell width={'16%'}><Typography variant='h5' fontWeight={'bold'}>End at</Typography></TableCell>
+                <TableCell width={'16%'}><Typography variant='h5' fontWeight={'bold'}>Finish at</Typography></TableCell>
                 <TableCell width={'4%'}><Typography variant='h5' fontWeight={'bold'}>Cost</Typography></TableCell>
                 <TableCell width={'10%'}><Typography variant='h5' fontWeight={'bold'}>Winner</Typography></TableCell>
               </TableHead>

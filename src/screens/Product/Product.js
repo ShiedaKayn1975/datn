@@ -13,6 +13,7 @@ import { toast } from 'react-toastify'
 import UserResource from '../../resources/User'
 import moment from 'moment'
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
 const schema = {
   name: {
@@ -31,6 +32,7 @@ const Product = (props) => {
   const [products, setProducts] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
+  const currentApp = useSelector(selector => selector.currentApp)
   const XS_GRID = 3
   const navigate = useNavigate()
 
@@ -135,10 +137,12 @@ const Product = (props) => {
                 width: 'max-content'
               }}
             >
-              {/* <Button variant='outlined' endIcon={<IconCaretDown fill={theme.palette.primary.main} />} >More actions</Button> */}
-              <Button variant='contained'
-                onClick={newProduct}
-              >New product</Button>
+              {
+                currentApp == 'seller' &&
+                <Button variant='contained'
+                  onClick={newProduct}
+                >New product</Button>
+              }
             </Stack>
           </Grid>
         </Grid>
@@ -171,13 +175,6 @@ const Product = (props) => {
                         key={index}
                         title={product.name}
                         subtitle={moment(product.created_at).format('lll')}
-                      // actionIcon={
-                      //   <IconButton
-                      //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                      //     aria-label={`info about ${product.name}`}
-                      //   >
-                      //   </IconButton>
-                      // }
                       />
                     </ImageListItem>
                   </PaperItem>

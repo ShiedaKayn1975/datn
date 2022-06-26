@@ -68,7 +68,6 @@ export default class FormModal extends React.Component {
           toast.success("Success")
           this.handleClose()
         }).catch(error => {
-          toast.error(DefaultApiErrorHandler(error).message)
           this.setState({ submitting: false })
         }) 
       }
